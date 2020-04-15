@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project 4 (Temporary Title)</title>
+    <!-- link to the mapquest stylesheet -->
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
     <!-- link to Google Fonts -->
     <!-- link to Fontawesome -->
     <script src="https://kit.fontawesome.com/f3369905b3.js" crossorigin="anonymous"></script>
@@ -12,7 +14,7 @@
 </head>
 <body>
     <header>
-        <h1></h1>
+        <h1>COVID-19 Updates</h1>
     </header>
 
     <main>
@@ -284,7 +286,24 @@
             </h3>
             <p class="countryConfirmed">Confirmed <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
             <p class="countryRecovered">Recovered <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+            <p class="countryPopulation">Population <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
         </div>
+        <form action="#"name="regionForm" autocomplete="off">
+            <label for="regionList"></label>
+            <select name="regionList" id="regionList">
+                <option value="AM">America</option>
+                <option value="EU">Europe</option>
+                <option value="AF">Africa</option>
+                <option value="AS">Asia</option>
+            </select>
+        </form>
+        <div class="regionContainer"> 
+            <h3 class="regionName">COVID-19 Updates for <span></span>
+            </h3>
+            <p class="regionConfirmed">Confirmed <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+            <p class="regionRecovered">Recovered <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+        </div>
+        <div id="map" style="width: 50%; height: 530px;"></div>
     </main>
 
     <footer>
@@ -296,6 +315,8 @@
         integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'>
     </script> 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!-- mapquest sdk -->
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
     <script src="script.js"></script> 
 </body>
 </html>
