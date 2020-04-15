@@ -235,8 +235,105 @@ html {
   overflow: hidden;
 }
 
+/* GENERIC OVERRIDES */
+body,
+ul,
+li,
+h1,
+h2,
+h3,
+button,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+/* default font size and smooth scrolling - DON'T CHANGE */
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  background-color: inherit;
+  font-family: inherit;
+  color: inherit;
+}
+
+a {
+  color: #26a8c9;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input,
+fieldset {
+  border: none;
+}
+
 .wrapper {
-  max-width: 1200;
+  max-width: 1200px;
   width: 80%;
   margin: 0 auto;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 2.2rem;
+}
+
+header {
+  padding: 20px 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+main {
+  padding: 50px 0;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.globalContainer {
+  margin-bottom: 50px;
+}
+
+.globalContainer p {
+  font-weight: 600;
+}
+
+.globalContainer p:not(:last-of-type) {
+  font-size: 2rem;
+  line-height: 3rem;
+}
+
+.globalContainer span {
+  font-weight: 400;
+}
+
+canvas {
+  border: 1px solid #dbdbdb;
+  padding: 40px;
+}
+
+footer {
+  border-top: 1px solid #e2e2e2;
+  text-align: center;
+  padding: 20px 0;
 }

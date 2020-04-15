@@ -1,0 +1,26 @@
+main {
+    padding: 50px 0;
+}
+
+h1 {font-weight: 700;}
+
+h2 {margin-bottom: 20px;}
+
+.globalContainer {
+    margin-bottom: 50px;
+        p {
+            font-weight: 600;
+        }
+        p:not(:last-of-type) {
+            font-size: 2rem;
+            line-height: 3rem;
+        }
+        span {
+            font-weight: 400;
+        }
+}
+
+canvas {
+    border: 1px solid rgb(219, 219, 219);
+    padding: 40px;
+}

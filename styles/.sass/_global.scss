@@ -1,5 +1,47 @@
+/* GENERIC OVERRIDES */
+body,
+ul,
+li,
+h1,
+h2,
+h3, 
+button,
+p {
+	margin: 0;
+    padding: 0;
+}
+
+/* default font size and smooth scrolling - DON'T CHANGE */
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+ul {list-style: none;}
+
+button {
+    background-color: inherit;
+    font-family: inherit; 
+    color: inherit;
+}
+
+a {
+    color: #26a8c9;
+    text-decoration: none;
+    &:hover {text-decoration: underline;}
+}
+
+input, 
+fieldset {border: none;}
+
 .wrapper{
-    max-width:1200;
+    max-width:1200px;
     width:80%;
     margin:0 auto;
 }
+
+body {
+    font-size: 1.6rem;
+    font-family: 'Source Sans Pro', sans-serif;
+    line-height: 2.2rem;
+}  

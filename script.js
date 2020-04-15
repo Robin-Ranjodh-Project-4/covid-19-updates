@@ -2,7 +2,7 @@ const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
 dataApp.available = false;
-
+ 
 dataApp.getGlobalData = $.ajax({
     url: 'https://api.covid19api.com/summary',
     method:'GET',
@@ -20,31 +20,33 @@ dataApp.displayGlobalData = () => {
     })
 }
 
+dataApp.sortCountries = (object) => {
+    const countriesSorted = Object.entries(object).sort(function (a, b) {
+        const aNum = a[1];
+        const bNum = b[1];
+        return bNum - aNum;
+    });
+
+    return countriesSorted;
+}
+
 dataApp.displayTopTen = () => {
     dataApp.getGlobalData
     .then((result) => {
         const countries = result.Countries
-        let newObject = {}
+        let countryData = {}
+
         countries.forEach((index) => {
-            newObject[index.Country] = index.TotalConfirmed;
+            countryData[index.Country] = index.TotalConfirmed;
         })
         
-        const countriesSorted = Object.entries(newObject).sort(function (a, b) {
-            const aNum = a[1];
-            const bNum = b[1];
-            return bNum - aNum;
-        });
-        
+        const countriesSorted = dataApp.sortCountries(countryData);
         const newArray = Object.values(countriesSorted)
         const topTenResults = newArray.slice(0, 10); 
         
-        const countryNames = topTenResults.map((num) => {
-            return num[0];
-        });
-        const countryNumbers = topTenResults.map((num) => {
-            return num[1];
-        }) 
-        dataApp.displayChart(countryNames,countryNumbers);
+        const countryNames = topTenResults.map(num => num[0]);
+        const countryCases = topTenResults.map(num => num[1]); 
+        dataApp.displayChart(countryNames, countryCases);
     })
 };
 
@@ -59,7 +61,7 @@ dataApp.displayChart = (countries,cases) => {
                 data: [...cases],
                 backgroundColor: '#3498db',
                 borderColor: 'rgba(255,111,22,0.6)',
-                borderWidth: 2
+                borderWidth: 0 
             }]
         },
         options: {
@@ -74,14 +76,13 @@ dataApp.displayChart = (countries,cases) => {
     });
 }
 
-
 dataApp.getUserSelection = (e) => {
     const countryCode = e.target.value;
     dataApp.getCountryData(countryCode);
     dataApp.getPopulationData(countryCode);
 }
 
-dataApp.getCountryData = (countryCode)=>{
+dataApp.getCountryData = (countryCode) => {
     const apiUrl = `https://api.covid19api.com/total/country/${countryCode}`;
     $.ajax({
         url:apiUrl,
