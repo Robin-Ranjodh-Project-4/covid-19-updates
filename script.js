@@ -3,44 +3,49 @@ const dataApp = {} //namespace object
 dataApp.map = '';
 dataApp.available = false;
 
-dataApp.getGlobalData = () => {
-    $.ajax({
-        url: 'https://api.covid19api.com/summary',
-        method:'GET',
-        format:'jsonp',
-        success:function(result){
-        },
-        error:function(error){
-        }
-    }).then(function(result){
-        dataApp.displayGlobalData(result);
-        dataApp.displayTopTen(result);
-    });
-} 
-dataApp.displayTopTen = (result) => {
-    const countries = result.Countries
-    let newObject = {}
-    countries.forEach((index) => {
-        newObject[index.Country] = index.TotalConfirmed;
+dataApp.getGlobalData = $.ajax({
+    url: 'https://api.covid19api.com/summary',
+    method:'GET',
+    format:'jsonp' 
+}) 
+
+dataApp.displayGlobalData = () => {
+    dataApp.getGlobalData
+    .then((result) => {
+        const {NewConfirmed,NewDeaths,NewRecovered,TotalConfirmed,TotalDeaths, TotalRecovered} = result.Global;
+        $('.totalConfirmed span').html(`${TotalConfirmed}`);
+        $('.totalRecovered span').html(`${TotalRecovered}`);
+        $('.totalDeaths span').html(`${TotalDeaths}`); 
+        $('.timeElapsed').html(result.Date);
     })
-    
-    const countriesSorted = Object.entries(newObject).sort(function (a, b) {
-        const aNum = a[1];
-        const bNum = b[1];
-        return bNum - aNum;
-    });
-    
-    const newArray = Object.values(countriesSorted)
-    const topTenResults = newArray.slice(0, 10); 
-    
-    
-    const countryNames = topTenResults.map((num) => {
-        return num[0];
-    });
-    const countryNumbers = topTenResults.map((num) => {
-        return num[1];
-    }) 
-    dataApp.displayChart(countryNames,countryNumbers);
+}
+
+dataApp.displayTopTen = () => {
+    dataApp.getGlobalData
+    .then((result) => {
+        const countries = result.Countries
+        let newObject = {}
+        countries.forEach((index) => {
+            newObject[index.Country] = index.TotalConfirmed;
+        })
+        
+        const countriesSorted = Object.entries(newObject).sort(function (a, b) {
+            const aNum = a[1];
+            const bNum = b[1];
+            return bNum - aNum;
+        });
+        
+        const newArray = Object.values(countriesSorted)
+        const topTenResults = newArray.slice(0, 10); 
+        
+        const countryNames = topTenResults.map((num) => {
+            return num[0];
+        });
+        const countryNumbers = topTenResults.map((num) => {
+            return num[1];
+        }) 
+        dataApp.displayChart(countryNames,countryNumbers);
+    })
 };
 
 dataApp.displayChart = (countries,cases) => { 
@@ -69,30 +74,20 @@ dataApp.displayChart = (countries,cases) => {
     });
 }
 
-dataApp.displayGlobalData = (res) => {
-    const {NewConfirmed,NewDeaths,NewRecovered,TotalConfirmed,TotalDeaths, TotalRecovered} = res.Global;
-    $('.totalConfirmed span').html(`${TotalConfirmed}`);
-    $('.totalRecovered span').html(`${TotalRecovered}`);
-    $('.totalDeaths span').html(`${TotalDeaths}`); 
-    $('.timeElapsed').html(res.Date);
-}
 
 dataApp.getUserSelection = (e) => {
     const countryCode = e.target.value;
     dataApp.getCountryData(countryCode);
     dataApp.getPopulationData(countryCode);
 }
+
 dataApp.getCountryData = (countryCode)=>{
     const apiUrl = `https://api.covid19api.com/total/country/${countryCode}`;
     $.ajax({
         url:apiUrl,
         method:'GET',
         format:'jsonp',
-        async:false,
-        success:function(result){
-        },
-        error:function(error){
-        }
+        async:false
     }).then((result)=>{ 
         let countryData = result[result.length - 1];
         console.log(countryData);
@@ -144,6 +139,7 @@ dataApp.getPopulationData = (countryCode)=>{
         }
     });
 }
+
 dataApp.getMap = function(lat,lng){
     console.log("GET MAP at "+lat+"::"+lng)
     L.mapquest.key = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
@@ -156,9 +152,11 @@ dataApp.getMap = function(lat,lng){
 
 // Initialization
 dataApp.init = () =>{
-    dataApp.getGlobalData();
+    dataApp.displayGlobalData();
+    dataApp.displayTopTen();
     dataApp.getCountryData("CA");
     dataApp.getPopulationData("CA");
+    // Write a function to get the map icon for the country
     dataApp.getMap(60,-95);// pass the coordinates of Canada
     $('select#countryList').on('change', dataApp.getUserSelection);
 } 
