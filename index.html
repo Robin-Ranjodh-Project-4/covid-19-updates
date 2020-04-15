@@ -7,24 +7,27 @@
     <!-- link to the mapquest stylesheet -->
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
     <!-- link to Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- link to Fontawesome -->
     <script src="https://kit.fontawesome.com/f3369905b3.js" crossorigin="anonymous"></script>
     <!-- link to styles -->
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    <header>
+    <header class="wrapper">
         <h1>COVID-19 Updates</h1>
     </header>
     
-    <main>
+    <main class="wrapper">
         <div class="globalContainer">
+            <h2>Global Reported Cases</h2>
             <p class="totalConfirmed">Total Confirmed: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
             <p class="totalDeaths">Total Deceased: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
             <p class="totalRecovered">Total Recovered: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
             <p>Last Updated: <span class="timeElapsed"><img src="assets/ellipsis.gif" width=20 height=20></span></p>
         </div>
 
+        <h2>Top 10 Countries With Most Confirmed Cases</h2>
         <canvas id="barChart" width="500" height="500"></canvas>
 
         <form action="#" name="countryForm" autocomplete="off">
@@ -306,7 +309,8 @@
         <div id="map" style="width: 50%; height: 530px;"></div>
     </main>
 
-    <footer>
+    <footer class="wrapper">
+        <p>Code and design by <a href="https://www.ranjodhsandhu.com/" target="_blank">Ranjodh Singh</a> and <a href="https://www.robinnong.com" target="_blank">Robin Nong</a>.</p>
         <p>Data provided by <a href="https://covid19api.com/">COVID19 API</a>, sourced from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins CSSE</a>.</p>
     </footer>
     
