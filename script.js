@@ -3,19 +3,29 @@ const dataApp = {} //namespace object
 dataApp.map = '';
 dataApp.available = false;
  
-dataApp.getGlobalData = $.ajax({
-    url: 'https://api.covid19api.com/summary',
-    method:'GET',
-    format:'jsonp' 
-}) 
+dataApp.getGlobalData = function(endPoint){ 
+    return $.ajax({
+        url: `https://api.covid19api.com/${endPoint}`,
+        method:'GET',
+        format:'jsonp' 
+    }) 
+}
 
-dataApp.displayGlobalData = () => {
-    dataApp.getGlobalData
+dataApp.displayGlobalData = (type) => {
+    dataApp.getGlobalData("summary")
     .then((result) => {
         const {NewConfirmed,NewDeaths,NewRecovered,TotalConfirmed,TotalDeaths, TotalRecovered} = result.Global;
-        $('.totalConfirmed span').html(`${TotalConfirmed}`);
-        $('.totalRecovered span').html(`${TotalRecovered}`);
-        $('.totalDeaths span').html(`${TotalDeaths}`); 
+        if (type === "totalCases") {
+            $('.viewType').text("Total")
+            $('.totalConfirmed span').html(`${TotalConfirmed}`);
+            $('.totalRecovered span').html(`${TotalRecovered}`);
+            $('.totalDeaths span').html(`${TotalDeaths}`); 
+        } else {
+            $('.viewType').text("New")
+            $('.totalConfirmed span').html(`${NewConfirmed}`);
+            $('.totalRecovered span').html(`${NewRecovered}`);
+            $('.totalDeaths span').html(`${NewDeaths}`); 
+        }
         $('.timeElapsed').html(result.Date);
     })
 }
@@ -31,7 +41,7 @@ dataApp.sortCountries = (object) => {
 }
 
 dataApp.displayTopTen = () => {
-    dataApp.getGlobalData
+    dataApp.getGlobalData("summary")
     .then((result) => {
         const countries = result.Countries
         let countryData = {}
@@ -89,9 +99,10 @@ dataApp.getCountryData = (countryCode) => {
         method:'GET',
         format:'jsonp',
         async:false
-    }).then((result)=>{ 
+    })
+    .then((result) => { 
         let countryData = result[result.length - 1];
-        console.log(countryData);
+
         if(countryData){
             dataApp.available = true;
             $('.countryName span').html(countryData.Country);
@@ -106,9 +117,27 @@ dataApp.getCountryData = (countryCode) => {
     });
 }
 
-dataApp.getPopulationData = (countryCode)=>{
+dataApp.displayOnMap = (lat, lng, name) => {
+    const cases = $('.countryConfirmed span').text();
+    if (dataApp.map) {
+        dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
+        let popUp = 'Data Not Available';
+        if (dataApp.available) {
+            popUp = `<strong>${name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
+        }
+
+        L.marker([`${lat}`, `${lng}`])
+            .addTo(dataApp.map)
+            .bindPopup(popUp)
+            .openPopup()
+    } else {
+        console.log("Map not found");
+    }
+}
+
+dataApp.getPopulationData = (countryCode) => {
     const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
-    //'https://restcountries-v1.p.rapidapi.com/all';
+
     $.ajax({
         url:apiUrl,
         method:'GET',
@@ -117,32 +146,18 @@ dataApp.getPopulationData = (countryCode)=>{
             'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
             'x-rapidapi-key': '6f14bd9ffbmsh0b1fd17cc1d70e5p1cbae5jsn22a2ab82fc71'
         }
-    }).then(function(result){
-        console.log(result);
+    })
+    .then((result) => {
         $('.countryPopulation span').html(result.population);
         const lat = result.latlng[0];
         const lng = result.latlng[1];
-        console.log(lat,lng);
-        const cases = $('.countryConfirmed span').text();
-        if (dataApp.map) {
-            dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
-            let popUp = 'Data Not Available';
-            if(dataApp.available){
-                popUp = `<strong>${result.name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
-            }
+        const name = result.name;
 
-            L.marker([`${lat}`, `${lng}`])
-                .addTo(dataApp.map)
-                .bindPopup(popUp)
-                .openPopup()
-        } else {
-            console.log("Map not found");
-        }
+        dataApp.displayOnMap(lat, lng, name);
     });
 }
 
 dataApp.getMap = function(lat,lng){
-    console.log("GET MAP at "+lat+"::"+lng)
     L.mapquest.key = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
     dataApp.map =  L.mapquest.map('map', {
             center: [`${lat}`,`${lng}`],
@@ -153,13 +168,17 @@ dataApp.getMap = function(lat,lng){
 
 // Initialization
 dataApp.init = () =>{
-    dataApp.displayGlobalData();
+    dataApp.displayGlobalData("totalCases");
     dataApp.displayTopTen();
     dataApp.getCountryData("CA");
     dataApp.getPopulationData("CA");
     // Write a function to get the map icon for the country
     dataApp.getMap(60,-95);// pass the coordinates of Canada
     $('select#countryList').on('change', dataApp.getUserSelection);
+    $('form[name="globalForm"]').on('change', function(e){
+        const casesType = e.target.value
+        dataApp.displayGlobalData(casesType);
+    });
 } 
 // Document Ready
 $(() => {

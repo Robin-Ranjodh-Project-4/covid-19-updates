@@ -20,10 +20,18 @@
     
     <main class="wrapper">
         <div class="globalContainer">
-            <h2>Global Reported Cases</h2>
-            <p class="totalConfirmed">Total Confirmed: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
-            <p class="totalDeaths">Total Deceased: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
-            <p class="totalRecovered">Total Recovered: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+            <h2>Global Reported Cases :<span class="viewType"></span></h2>
+
+            <form action="#" name="globalForm" autocomplete="off">
+                <input type="radio" name="cases" id="totalCases" value="totalCases" checked>
+                <label for="totalCases">Total Cases</label>
+                <input type="radio" name="cases" id="newCases" value="newCases">
+                <label for="newCases">New Cases</label>
+            </form>
+
+            <p class="totalConfirmed">Confirmed: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+            <p class="totalDeaths">Deceased: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+            <p class="totalRecovered">Recovered: <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
             <p>Last Updated: <span class="timeElapsed"><img src="assets/ellipsis.gif" width=20 height=20></span></p>
         </div>
 
