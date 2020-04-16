@@ -1,7 +1,6 @@
 const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
-dataApp.available = false;
  
 dataApp.getGlobalData = function(endPoint){ 
     return $.ajax({
@@ -87,93 +86,150 @@ dataApp.displayChart = (countries,cases) => {
 }
 
 dataApp.getUserSelection = (e) => {
-    const countryCode = e.target.value;
-    dataApp.getCountryData(countryCode);
-    dataApp.getPopulationData(countryCode);
+    const countryCode = $("#countryList option:selected").val();
+    dataApp.displayCountryData(countryCode);
+    dataApp.displayRestCountriesData(countryCode);
 }
 
-dataApp.getCountryData = (countryCode) => {
-    const apiUrl = `https://api.covid19api.com/total/country/${countryCode}`;
-    $.ajax({
-        url:apiUrl,
+dataApp.getCountryData = function(countryCode) {
+    return $.ajax({
+        url: `https://api.covid19api.com/total/country/${countryCode}`,
         method:'GET',
-        format:'jsonp',
-        async:false
-    })
-    .then((result) => { 
-        let countryData = result[result.length - 1];
+        format:'jsonp'
+    });
+}
 
+dataApp.displayCountryData = function(countryCode){
+    const receivedCountryPromise = dataApp.getCountryData(countryCode);
+    $.when(receivedCountryPromise)
+    .then((caughtCountryData) => { 
+        let countryData = caughtCountryData[caughtCountryData.length - 1];
+        const countryName = $("#countryList option:selected").html();
+        $('.countryName span').html(countryName);
         if(countryData){
-            dataApp.available = true;
-            $('.countryName span').html(countryData.Country);
             $('.countryConfirmed span').html(countryData.Confirmed);
             $('.countryRecovered span').html(countryData.Recovered);
         }else{
-            dataApp.available = false
-            $('.countryName span').html("No Data");
-            $('.countryConfirmed span').html("No Data");
-            $('.countryRecovered span').html("No Data");
+            $('.countryConfirmed span').html("0");
+            $('.countryRecovered span').html("0");
         }
     });
 }
 
-dataApp.displayOnMap = (lat, lng, name) => {
-    const cases = $('.countryConfirmed span').text();
+let marker = '';
+dataApp.displayOnMap = (lat, lng, name, cases) => {
+    
+    if(dataApp.map.hasLayer(marker))
+        dataApp.map.removeLayer(marker);
     if (dataApp.map) {
         dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
-        let popUp = 'Data Not Available';
-        if (dataApp.available) {
-            popUp = `<strong>${name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
-        }
-
-        L.marker([`${lat}`, `${lng}`])
-            .addTo(dataApp.map)
-            .bindPopup(popUp)
-            .openPopup()
+        let popUp = `<strong>${name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
+        marker = L.marker([`${lat}`, `${lng}`], {
+            icon: L.mapquest.icons.marker({
+                primaryColor: '#ff1111',
+                secondaryColor: '#111111',
+                shadow: true,
+                size: 'sm',
+                symbol: ''
+            })
+        });
+        // marker.addTo(dataApp.map)
+        dataApp.map.addLayer(marker);
+        marker.bindPopup(popUp)
+        .openPopup();
+        // console.log(dataApp.map.hasLayer(marker));
     } else {
         console.log("Map not found");
     }
 }
 
-dataApp.getPopulationData = (countryCode) => {
+dataApp.getRestCountriesData = function(countryCode){
     const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
-
-    $.ajax({
-        url:apiUrl,
-        method:'GET',
-        format:'jsonp',
+    return $.ajax({
+        url: apiUrl,
+        method: 'GET',
+        format: 'jsonp',
         headers: {
             'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
             'x-rapidapi-key': '6f14bd9ffbmsh0b1fd17cc1d70e5p1cbae5jsn22a2ab82fc71'
         }
+    });
+}
+dataApp.displayRestCountriesData = (countryCode) => {
+    const receivedRestPromise = dataApp.getRestCountriesData(countryCode);
+    const receivedCountryPromise = dataApp.getCountryData(countryCode);
+    $.when(receivedRestPromise,receivedCountryPromise)
+    .then((caughtRestData, caughtCountryData ) => {
+        const population = caughtRestData[0].population;
+        const lat = caughtRestData[0].latlng[0];
+        const lng = caughtRestData[0].latlng[1];
+        const name = caughtRestData[0].name;
+        $('.countryPopulation span').html(population);
+        if(caughtCountryData[0].length > 0){
+            const countryData = caughtCountryData[0][caughtCountryData[0].length - 1];
+            const cases = countryData.Confirmed;
+            dataApp.displayOnMap(lat, lng, name, cases);
+        }else
+            dataApp.displayOnMap(lat,lng,name,"0");
+    });
+}
+dataApp.getGeoLocation = function(latlng){
+    return $.ajax({
+        url: `http://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
+        method: 'GET'
     })
-    .then((result) => {
-        $('.countryPopulation span').html(result.population);
-        const lat = result.latlng[0];
-        const lng = result.latlng[1];
-        const name = result.name;
-
-        dataApp.displayOnMap(lat, lng, name);
+}
+dataApp.handleMapClick = function(e){
+    // get the geocode location 
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+    const latlng = lat + "," + lng;
+    const receivedGeoLocationPromise = dataApp.getGeoLocation(latlng);
+    $.when(receivedGeoLocationPromise)
+    .then((caughtGeoLocationData) => {
+        let locationsLength = caughtGeoLocationData.results[0].locations.length;
+        if (locationsLength){
+            const countryCode = caughtGeoLocationData.results[0].locations[0].adminArea1;
+            // XZ, exclude international waters
+            if (countryCode !== 'XZ'){
+                const receivedCountryPromise = dataApp.getCountryData(countryCode);
+                $.when(receivedCountryPromise)
+                .then((caughtCountryData) => {
+                    const countryData = caughtCountryData[caughtCountryData.length - 1];
+                    if (countryData) {
+                        const name = countryData.Country;
+                        const cases = countryData.Confirmed;
+                        dataApp.displayOnMap(lat, lng, name, cases);
+                    }else{
+                        dataApp.displayOnMap(lat,lng, name, "0");
+                    }
+                })
+            }
+        }
     });
 }
 
 dataApp.getMap = function(lat,lng){
-    L.mapquest.key = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
-    dataApp.map =  L.mapquest.map('map', {
+    const apiKEY = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
+    L.mapquest.key = apiKEY;
+    dataApp.map =  
+    L.mapquest.map('map', {
             center: [`${lat}`,`${lng}`],
             layers: L.mapquest.tileLayer('map'),
-            zoom: 4
-        });
+            zoom: 4,
+            maxZoom:8,
+            minZoom:3
+    }).on('click', dataApp.handleMapClick);
 }
 
 // Initialization
 dataApp.init = () =>{
     dataApp.displayGlobalData("totalCases");
     dataApp.displayTopTen();
-    dataApp.getCountryData("CA");
-    dataApp.getPopulationData("CA");
-    // Write a function to get the map icon for the country
-    dataApp.getMap(60,-95);// pass the coordinates of Canada
+    dataApp.displayCountryData("CA");
+    dataApp.displayRestCountriesData("CA");
+    dataApp.getMap(60,-95);// pass the coordinates to center map on Canada
+    // Write a function to get the map icon for the country (pending)
     $('select#countryList').on('change', dataApp.getUserSelection);
     $('form[name="globalForm"]').on('change', function(e){
         const casesType = e.target.value
