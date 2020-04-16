@@ -123,13 +123,14 @@ dataApp.displayCountryData = function(countryCode){
 }
 
 
-dataApp.displayOnMap = (lat, lng, name, cases) => {
+dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
     
     if(dataApp.map.hasLayer(dataApp.marker))
         dataApp.map.removeLayer(dataApp.marker);
     if (dataApp.map) {
+        const flag = dataApp.codeToFlag(cC);
         dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
-        let popUp = `<strong>${name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
+        let popUp = `<strong>${flag} ${name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
         dataApp.marker = L.marker([`${lat}`, `${lng}`], {
             icon: L.mapquest.icons.marker({
                 primaryColor: '#ff1111',
@@ -175,9 +176,9 @@ dataApp.displayRestCountriesData = (countryCode) => {
         if(caughtCountryData[0].length > 0){
             const countryData = caughtCountryData[0][caughtCountryData[0].length - 1];
             const cases = countryData.Confirmed;
-            dataApp.displayOnMap(lat, lng, name, cases);
+            dataApp.displayOnMap(lat, lng, name, cases, countryCode);
         }else
-            dataApp.displayOnMap(lat,lng,name,"0");
+            dataApp.displayOnMap(lat,lng,name,"0",countryCode);
     });
 }
 // returns geo location promise
@@ -191,7 +192,6 @@ dataApp.handleMapClick = function(e){
     // get the geocode location 
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
-    alert("LAT: "+lat+" Long: "+lng);
     const latlng = lat + "," + lng;
     const receivedGeoLocationPromise = dataApp.getGeoLocation(latlng);
     $.when(receivedGeoLocationPromise)
@@ -208,9 +208,9 @@ dataApp.handleMapClick = function(e){
                     if (countryData) {
                         const name = countryData.Country;
                         const cases = countryData.Confirmed;
-                        dataApp.displayOnMap(lat, lng, name, cases);
+                        dataApp.displayOnMap(lat, lng, name, cases, countryCode);
                     }else{
-                        dataApp.displayOnMap(lat,lng, name, "0");
+                        dataApp.displayOnMap(lat,lng, name, "0", countryCode);
                     }
                 })
             }
@@ -232,6 +232,13 @@ dataApp.getMap = function(lat,lng){
     }).on('click', dataApp.handleMapClick);
 }
 
+// converts country code to flag
+dataApp.codeToFlag = function(countryCode){
+    return countryCode
+    .toUpperCase()
+    .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
+}
+
 // Initialization
 dataApp.init = () =>{
     dataApp.displayGlobalData("totalCases");
@@ -239,7 +246,6 @@ dataApp.init = () =>{
     dataApp.displayCountryData("CA");
     dataApp.displayRestCountriesData("CA");
     dataApp.getMap(60,-95);// pass the coordinates to center map on Canada
-    // Write a function to get the map icon for the country (pending)
     $('select#countryList').on('change', dataApp.getUserSelection);
     $('form[name="globalForm"]').on('change', function(e){
         const casesType = e.target.value 
