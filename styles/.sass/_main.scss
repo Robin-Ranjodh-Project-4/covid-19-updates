@@ -1,10 +1,17 @@
 main {
-    padding: 50px 0;
+    padding: 100px 0;
 }
 
 h1 {font-weight: 700;}
 
-h2 {margin-bottom: 20px;}
+h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+h3{
+    font-size: 2.4rem;
+}
 
 .globalContainer {
     margin-bottom: 50px;
@@ -20,7 +27,73 @@ h2 {margin-bottom: 20px;}
         }
 }
 
-canvas {
-    border: 1px solid rgb(219, 219, 219);
-    padding: 40px;
+form[name="globalForm"] {
+    font-size: 1.8rem; 
+    label {
+        color: rgb(134, 134, 134);
+        font-weight: 600;
+        padding: 2px 0;
+        margin-right: 20px;
+        border-bottom: 1.5px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s; 
+    }
+    input{display: none;}
+    label:hover,
+    label:focus,
+    input:checked + label {
+        color: black;
+        border-bottom: 1.5px solid black;
+    }
 }
+
+select,
+option {
+    width: 250px;
+}
+
+.chartContainer {
+    border: 1px solid rgb(219, 219, 219);
+    position: relative; 
+    min-height: 500px; 
+    padding: 30px;  
+}
+
+.countryContainer {
+    margin-top: 50px;
+    display: flex;
+    h3 {
+        font-weight: 600;
+        margin-bottom: 10px;
+            span {
+                color: rgb(16, 118, 165);
+                font-weight: 700;}
+    }
+    h2:last-of-type {
+        margin-top: 40px;
+    }
+    form{margin-bottom: 20px;}
+}
+
+.map,
+.countryContainerContent {
+    width: 50%;
+}
+
+.map{height: 500px;}
+
+@media (max-width: 768px) {   
+    .countryContainer {
+        flex-direction: column;
+    }
+    .map,
+    .countryContainerContent {
+        width: 100%;
+    }
+    .map{
+        height: 400px;
+        margin-top: 20px;
+    }
+}
+
+select {padding: 10px;}
