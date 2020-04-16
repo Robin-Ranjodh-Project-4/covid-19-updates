@@ -1,7 +1,7 @@
 const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
- 
+dataApp.marker = '';
 dataApp.getGlobalData = function(endPoint){ 
     return $.ajax({
         url: `https://api.covid19api.com/${endPoint}`,
@@ -116,15 +116,15 @@ dataApp.displayCountryData = function(countryCode){
     });
 }
 
-let marker = '';
+
 dataApp.displayOnMap = (lat, lng, name, cases) => {
     
-    if(dataApp.map.hasLayer(marker))
-        dataApp.map.removeLayer(marker);
+    if(dataApp.map.hasLayer(dataApp.marker))
+        dataApp.map.removeLayer(dataApp.marker);
     if (dataApp.map) {
         dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
         let popUp = `<strong>${name}</strong> has <strong><br>${cases}</strong> confirmed cases`;
-        marker = L.marker([`${lat}`, `${lng}`], {
+        dataApp.marker = L.marker([`${lat}`, `${lng}`], {
             icon: L.mapquest.icons.marker({
                 primaryColor: '#ff1111',
                 secondaryColor: '#111111',
@@ -134,8 +134,8 @@ dataApp.displayOnMap = (lat, lng, name, cases) => {
             })
         });
         // marker.addTo(dataApp.map)
-        dataApp.map.addLayer(marker);
-        marker.bindPopup(popUp)
+        dataApp.map.addLayer(dataApp.marker);
+        dataApp.marker.bindPopup(popUp)
         .openPopup();
         // console.log(dataApp.map.hasLayer(marker));
     } else {
