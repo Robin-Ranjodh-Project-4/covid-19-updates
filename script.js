@@ -62,19 +62,23 @@ dataApp.displayTopTen = () => {
 
 dataApp.displayChart = (countries,cases) => { 
     let ctx = document.getElementById('barChart').getContext('2d');
+    Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', 'Arial', sans-serif";
+    Chart.defaults.global.defaultFontSize = 14;
     let myChart = new Chart(ctx, {
         type: 'horizontalBar',
         data: {
             labels: [...countries],
             datasets: [{
-                label: '# of Confirmed Cases',
+                label: '# of Confirmed Cases', 
                 data: [...cases],
-                backgroundColor: '#3498db',
-                borderColor: 'rgba(255,111,22,0.6)',
-                borderWidth: 0 
-            }]
+                backgroundColor: '#5fb6d3',
+                borderColor: 'rgba(255,111,22,0.6)', 
+                borderWidth: 0
+            }],
         },
         options: {
+            responsive: true, 
+            maintainAspectRatio: false, 
             scales: {
                 yAxes: [{
                     ticks: {
@@ -176,7 +180,7 @@ dataApp.init = () =>{
     dataApp.getMap(60,-95);// pass the coordinates of Canada
     $('select#countryList').on('change', dataApp.getUserSelection);
     $('form[name="globalForm"]').on('change', function(e){
-        const casesType = e.target.value
+        const casesType = e.target.value 
         dataApp.displayGlobalData(casesType);
     });
 } 
