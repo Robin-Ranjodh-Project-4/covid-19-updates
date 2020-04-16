@@ -2,6 +2,8 @@ const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
 dataApp.marker = '';
+
+// return global data promise
 dataApp.getGlobalData = function(endPoint){ 
     return $.ajax({
         url: `https://api.covid19api.com/${endPoint}`,
@@ -94,7 +96,7 @@ dataApp.getUserSelection = (e) => {
     dataApp.displayCountryData(countryCode);
     dataApp.displayRestCountriesData(countryCode);
 }
-
+// returns the country data promise
 dataApp.getCountryData = function(countryCode) {
     return $.ajax({
         url: `https://api.covid19api.com/total/country/${countryCode}`,
@@ -147,6 +149,7 @@ dataApp.displayOnMap = (lat, lng, name, cases) => {
     }
 }
 
+// returns rest countries data promise
 dataApp.getRestCountriesData = function(countryCode){
     const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
     return $.ajax({
@@ -177,6 +180,7 @@ dataApp.displayRestCountriesData = (countryCode) => {
             dataApp.displayOnMap(lat,lng,name,"0");
     });
 }
+// returns geo location promise
 dataApp.getGeoLocation = function(latlng){
     return $.ajax({
         url: `http://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
@@ -187,6 +191,7 @@ dataApp.handleMapClick = function(e){
     // get the geocode location 
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
+    alert("LAT: "+lat+" Long: "+lng);
     const latlng = lat + "," + lng;
     const receivedGeoLocationPromise = dataApp.getGeoLocation(latlng);
     $.when(receivedGeoLocationPromise)
@@ -222,7 +227,8 @@ dataApp.getMap = function(lat,lng){
             layers: L.mapquest.tileLayer('map'),
             zoom: 4,
             maxZoom:8,
-            minZoom:3
+            minZoom:3,
+            zoomControl: false
     }).on('click', dataApp.handleMapClick);
 }
 
