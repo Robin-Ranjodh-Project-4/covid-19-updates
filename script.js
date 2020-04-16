@@ -184,7 +184,7 @@ dataApp.displayRestCountriesData = (countryCode) => {
 // returns geo location promise
 dataApp.getGeoLocation = function(latlng){
     return $.ajax({
-        url: `http://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
+        url: `https://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
         method: 'GET',
         format:'json'
     })
