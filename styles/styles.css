@@ -368,7 +368,19 @@ option {
   border: 1px solid #dbdbdb;
   position: relative;
   min-height: 500px;
-  padding: 30px;
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    min-height: 300px;
+  }
+}
+
+.graphContainer {
+  margin-top: 40px;
+  border: 1px solid #dbdbdb;
+  position: relative;
+  min-height: 400px;
 }
 
 .countryContainer {
@@ -388,17 +400,17 @@ option {
   font-weight: 700;
 }
 
-.countryContainer h2:last-of-type {
-  margin-top: 40px;
-}
-
 .countryContainer form {
   margin-bottom: 20px;
 }
 
-.map,
 .countryContainerContent {
-  width: 50%;
+  width: 60%;
+  padding-right: 40px;
+}
+
+.map {
+  width: 40%;
 }
 
 .map {
