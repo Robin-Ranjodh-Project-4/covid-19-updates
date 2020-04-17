@@ -3,6 +3,7 @@ const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
 dataApp.marker = '';
+dataApp.lineGraph = null;
 
 // AJAX CALLS - PROMISE OBJECTS
 // return global data promise
@@ -12,6 +13,59 @@ dataApp.getGlobalData = (endPoint) => {
         method:'GET',
         format:'jsonp' 
     }) 
+}
+// returns the country data promise
+dataApp.getCountryData = function (countryCode) {
+    return $.ajax({
+        url: `https://api.covid19api.com/total/country/${countryCode}`,
+        method: 'GET',
+        format: 'jsonp'
+    });
+}
+// returns rest countries data promise
+dataApp.getRestCountriesData = function (countryCode) {
+    const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
+    return $.ajax({
+        url: apiUrl,
+        method: 'GET',
+        format: 'jsonp',
+        headers: {
+            'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
+            'x-rapidapi-key': '6f14bd9ffbmsh0b1fd17cc1d70e5p1cbae5jsn22a2ab82fc71'
+        }
+    });
+}
+// returns geo location promise
+dataApp.getGeoLocation = function (latlng) {
+    return $.ajax({
+        url: `https://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
+        method: 'GET',
+        format: 'json',
+        options: {
+            thumbMaps: false
+        }
+    })
+}
+
+dataApp.displayCountryList = ()=>{
+    const selectList = $('#countryList');
+    selectList.empty();
+    $.when(dataApp.getGlobalData('countries'))
+    .then((caughtCountryList)=>{
+        caughtCountryList.sort(function (a, b) {
+            return a.Country > b.Country;
+        });
+        let iso2 = [];
+        let names = [];
+        for(country in caughtCountryList){
+            iso2.push(caughtCountryList[country].ISO2);
+            names.push(caughtCountryList[country].Country);
+        }
+        iso2.forEach((code,index)=>{
+            const html = `<option value=${code}>${names[index]}</option>`;
+            selectList.append(html);
+        });
+    })
 }
 
 // returns the country data promise
@@ -136,6 +190,7 @@ dataApp.displayChart = (countries, cases) => {
                     const index = context.dataIndex; 
                     return index % 2 ? '#5fb6d3' : '#5562b6';
                 }, 
+
                 borderColor: 'rgba(255,111,22,0.6)', 
                 borderWidth: 0
             }],
@@ -207,7 +262,6 @@ dataApp.displayLineGraph = (dates, cases, name) => {
  
 dataApp.displayCountryData = (countryCode, countryName) => {
     const receivedCountryPromise = dataApp.getCountryData(countryCode);
-    
     $('.countryName span').html(countryName);
     
     $.when(receivedCountryPromise)
@@ -231,13 +285,21 @@ dataApp.displayCountryData = (countryCode, countryName) => {
         } 
         
         dataApp.displayLineGraph(countryDatesArray, countryCasesArray, countryName)  
-    })
+    }).fail((error)=>{
+        if(error.statusText === "Not Found"){
+            $('.countryName span').html(countryName);
+            $('.countryConfirmed span').html("0");
+            $('.countryRecovered span').html("0");
+            dataApp.displayLineGraph([],[],countryName);
+        }
+    });
 }
 
 dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
     
-    if(dataApp.map.hasLayer(dataApp.marker))
-        dataApp.map.removeLayer(dataApp.marker);
+    if(dataApp.map.hasLayer(dataApp.marker)) 
+    dataApp.map.removeLayer(dataApp.marker);
+    
     if (dataApp.map) {
         const flag = dataApp.codeToFlag(cC);
         dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
@@ -294,7 +356,8 @@ dataApp.handleMapClick = (e) => {
         
         if (locationsLength) {
             const countryCode = caughtGeoLocationData.results[0].locations[0].adminArea1;
-            
+            const countryName = caughtGeoLocationData.results[0].locations[0].adminArea1;
+
             // XZ, exclude international waters
             if (countryCode !== 'XZ') {
                 const receivedCountryPromise = dataApp.getCountryData(countryCode);
@@ -307,8 +370,8 @@ dataApp.handleMapClick = (e) => {
                         const name = countryData.Country;
                         const cases = countryData.Confirmed;
                         dataApp.displayOnMap(lat, lng, name, cases, countryCode);
-                    } else {
-                        dataApp.displayOnMap(lat,lng, name, "0", countryCode);
+                    } else{
+                        dataApp.displayOnMap(lat,lng, countryName, "0", countryCode);
                     }
                 })
             }
@@ -337,6 +400,35 @@ dataApp.codeToFlag = (countryCode) => {
     .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
 }
 
+
+dataApp.displayLineGraph = (dates,cases,name)=>{
+
+    if(dataApp.lineGraph){
+        dataApp.lineGraph.destroy();
+    }
+    dataApp.lineGraph = new Chart(document.getElementById("line-chart"), 
+    {
+        type: 'line',
+        data: {
+            labels: [...dates],
+            datasets: [{
+                data: [...cases],
+                label: name,
+                borderColor: "#3e95cd",
+                fill: true
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Progression of COVID-19 cases'
+            }
+        }
+    });
+
+}
+
+
 // Initialization
 dataApp.init = () => {
     dataApp.displayCountryList();
@@ -346,14 +438,14 @@ dataApp.init = () => {
     dataApp.displayRestCountriesData("CA");
     dataApp.getMap(60,-95);// pass the coordinates to center map on Canada
 
-    $('select#countryList').on('change', function () {
+    $('select#countryList').on('change', function() {
         const countryName = $("#countryList option:selected").text();
         const countryCode = $("#countryList option:selected").val();
 
         dataApp.displayCountryData(countryCode, countryName);
         dataApp.displayRestCountriesData(countryCode);
     });
-    
+
     $('form[name="globalForm"]').on('change', function(e){
         const casesType = e.target.value 
         dataApp.displayGlobalData(casesType);
