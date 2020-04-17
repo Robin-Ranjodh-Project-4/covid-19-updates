@@ -401,6 +401,7 @@ dataApp.codeToFlag = (countryCode) => {
 
 dataApp.displayLineGraph = (dates, cases, name)=>{
 
+
     if (dataApp.lineGraph){
         dataApp.lineGraph.destroy();
     }
