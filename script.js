@@ -381,6 +381,36 @@ dataApp.codeToFlag = (countryCode) => {
     .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
 }
 
+dataApp.displayLineGraph = (dates, cases, name)=>{
+
+
+    if (dataApp.lineGraph){
+        dataApp.lineGraph.destroy();
+    }
+
+    const canvas = document.getElementById("timeGraph");
+    const ctx = canvas.getContext('2d');
+    dataApp.lineGraph = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [...dates],
+            datasets: [{
+                data: [...cases],
+                label: name,
+                borderColor: "#3e95cd",
+                fill: false,
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Progression of COVID-19 cases'
+            }
+        }
+    });
+}
+
+
 // Initialization
 dataApp.init = () => {
     dataApp.displayCountryList();
