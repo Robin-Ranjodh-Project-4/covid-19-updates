@@ -46,6 +46,7 @@
                 <form action="#" name="countryForm" autocomplete="off">
                     <label for="countryList"></label>
                     <select name="countryList" id="countryList">
+                        <!-- Script file will population options here -->
                     </select>
                 </form>
 
@@ -54,7 +55,11 @@
                 <p class="countryConfirmed">Confirmed <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
                 <p class="countryRecovered">Recovered <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
                 <p class="countryPopulation">Population <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
-
+              
+                <div class="graphContainer">
+                    <canvas id="timeGraph"></canvas>
+                </div>
+              
                 <!-- <h2>Cases by Region</h2>
                 <form action="#" name="regionForm" autocomplete="off">
                     <label for="regionList"></label>
@@ -71,12 +76,12 @@
                     <p class="regionConfirmed">Confirmed <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
                     <p class="regionRecovered">Recovered <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
                 </div> -->
-                <div class="chart-container" width="500" height="550">
-                    <canvas id="line-chart"></canvas>
-                </div>
             </div>
             <div class="map" id="map"></div>
         </div>
+        <!-- Add helpful links to COVID19 informational links -->
+        <!-- https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html -->
+        <!-- https://www.who.int/emergencies/diseases/novel-coronavirus-2019 -->
     </main>
 
     <footer>
