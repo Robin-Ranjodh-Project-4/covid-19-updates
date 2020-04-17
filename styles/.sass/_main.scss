@@ -1,36 +1,45 @@
-main {
-    padding: 100px 0;
-}
-
-h1 {font-weight: 700;}
+main {padding: 100px 0;}
 
 h2 {
     font-size: 3rem;
     margin-bottom: 20px;
+    line-height: 3.2rem;
 }
 
-h3{
-    font-size: 2.4rem;
-}
+h3 {font-size: 2.4rem;}
 
-.globalContainer {
-    margin-bottom: 50px;
+.globalContainer {margin-bottom: 50px;}
+
+.globalStatsContainer{
+    text-align: center;
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+        div {
+            width: 180px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            margin: 0 20px;
+        }
         p {
-            font-weight: 600;
+            margin-top: 6px;
+            font-size: 2rem; 
         }
         p:not(:last-of-type) {
             font-size: 2rem;
             line-height: 3rem;
         }
         span {
-            font-weight: 400;
-        }
+            color: #5562b6;
+            font-size: 3rem;
+            font-weight: 700;
+    }
 }
 
 form[name="globalForm"] {
     font-size: 1.8rem; 
     label {
-        color: rgb(134, 134, 134);
+        color: #868686;
         font-weight: 600;
         padding: 2px 0;
         margin-right: 20px;
@@ -52,21 +61,33 @@ option {
     width: 250px;
 }
 
-.chartContainer {
-    border: 1px solid rgb(219, 219, 219);
-    position: relative; 
-    min-height: 500px;  
+section.chartSection {
+    background-color: #f3f3f3;
+    padding: 50px 0;
 }
 
-@media (max-width: 768px) {   
+.chartHeader{
+    text-align: center;
+}
+
+.chartContainer {
+    background-color: white;
+    border: 1px solid #e2e2e2;
+    position: relative; 
+    height: 450px;  
+    width: 600px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {    
     .chartContainer {
-        min-height: 300px;
+        width: 100%;
     }
 }
 
 .graphContainer {
     margin-top: 40px;
-    border: 1px solid rgb(219, 219, 219);
+    border: 1px solid #e2e2e2;
     position: relative; 
     min-height: 400px;  
 } 
