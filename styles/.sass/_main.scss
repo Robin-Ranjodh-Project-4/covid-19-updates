@@ -55,9 +55,21 @@ option {
 .chartContainer {
     border: 1px solid rgb(219, 219, 219);
     position: relative; 
-    min-height: 500px; 
-    padding: 30px;  
+    min-height: 500px;  
 }
+
+@media (max-width: 768px) {   
+    .chartContainer {
+        min-height: 300px;
+    }
+}
+
+.graphContainer {
+    margin-top: 40px;
+    border: 1px solid rgb(219, 219, 219);
+    position: relative; 
+    min-height: 400px;  
+} 
 
 .countryContainer {
     margin-top: 50px;
@@ -68,16 +80,17 @@ option {
             span {
                 color: rgb(16, 118, 165);
                 font-weight: 700;}
-    }
-    h2:last-of-type {
-        margin-top: 40px;
-    }
+    } 
     form{margin-bottom: 20px;}
 }
 
-.map,
 .countryContainerContent {
-    width: 50%;
+    width: 60%;
+    padding-right: 40px;
+}
+
+.map {
+    width: 40%;
 }
 
 .map{height: 500px;}
