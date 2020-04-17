@@ -296,7 +296,6 @@ dataApp.displayCountryData = (countryCode, countryName) => {
 }
 
 dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
-    
     if(dataApp.map.hasLayer(dataApp.marker)) 
     dataApp.map.removeLayer(dataApp.marker);
     
@@ -400,11 +399,13 @@ dataApp.codeToFlag = (countryCode) => {
     .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
 }
 
+dataApp.displayLineGraph = (dates, cases, name)=>{
 
-dataApp.displayLineGraph = (dates, cases, name) => {
-    if (dataApp.lineGraph) {
+
+    if (dataApp.lineGraph){
         dataApp.lineGraph.destroy();
     }
+
     const canvas = document.getElementById("timeGraph");
     const ctx = canvas.getContext('2d');
     dataApp.lineGraph = new Chart(ctx, {
@@ -426,7 +427,6 @@ dataApp.displayLineGraph = (dates, cases, name) => {
         }
     });
 }
-
 
 // Initialization
 dataApp.init = () => {
