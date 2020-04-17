@@ -46,60 +46,7 @@ dataApp.getGeoLocation = function (latlng) {
         }
     })
 }
-
-dataApp.displayCountryList = ()=>{
-    const selectList = $('#countryList');
-    selectList.empty();
-    $.when(dataApp.getGlobalData('countries'))
-    .then((caughtCountryList)=>{
-        caughtCountryList.sort(function (a, b) {
-            return a.Country > b.Country;
-        });
-        let iso2 = [];
-        let names = [];
-        for(country in caughtCountryList){
-            iso2.push(caughtCountryList[country].ISO2);
-            names.push(caughtCountryList[country].Country);
-        }
-        iso2.forEach((code,index)=>{
-            const html = `<option value=${code}>${names[index]}</option>`;
-            selectList.append(html);
-        });
-    })
-}
-
-// returns the country data promise
-dataApp.getCountryData = (countryCode) => {
-    return $.ajax({
-        url: `https://api.covid19api.com/total/country/${countryCode}`,
-        method: 'GET',
-        format: 'jsonp'
-    });
-}
-
-// returns rest countries data promise
-dataApp.getRestCountriesData = (countryCode) => {
-    const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
-    return $.ajax({
-        url: apiUrl,
-        method: 'GET',
-        format: 'jsonp',
-        headers: {
-            'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
-            'x-rapidapi-key': '6f14bd9ffbmsh0b1fd17cc1d70e5p1cbae5jsn22a2ab82fc71'
-        }
-    });
-}
-
-// returns geo location promise
-dataApp.getGeoLocation = (latlng) => {
-    return $.ajax({
-        url: `https://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
-        method: 'GET',
-        format: 'json'
-    })
-}
-
+ 
 dataApp.displayCountryList = () => {
     const selectList = $('#countryList');
     selectList.empty();
@@ -124,22 +71,35 @@ dataApp.displayCountryList = () => {
     })
 }  
 
+// Adds white space after every 3rd digit
+dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+
 // Display global statistics based on user selection
 dataApp.displayGlobalData = (type) => {
     dataApp.getGlobalData("summary")
     .then((result) => {
-        const {NewConfirmed,NewDeaths,NewRecovered,TotalConfirmed,TotalDeaths, TotalRecovered} = result.Global;
+        const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
+        let view;
+        let confirmed;
+        let deaths;
+        let recovered;
+        
         if (type === "totalCases") {
-            $('.viewType').text("Total")
-            $('.totalConfirmed span').html(`${TotalConfirmed}`);
-            $('.totalRecovered span').html(`${TotalRecovered}`);
-            $('.totalDeaths span').html(`${TotalDeaths}`); 
+            view = 'Total';
+            confirmed = TotalConfirmed;
+            deaths = TotalDeaths;
+            recovered = TotalRecovered;
         } else {
-            $('.viewType').text("New")
-            $('.totalConfirmed span').html(`${NewConfirmed}`);
-            $('.totalRecovered span').html(`${NewRecovered}`);
-            $('.totalDeaths span').html(`${NewDeaths}`); 
+            view = 'New';
+            confirmed =  NewConfirmed;
+            deaths = NewDeaths;
+            recovered = NewRecovered;
         }
+
+        $('.viewType').text(view)
+        $('.totalConfirmed span').html(`${dataApp.formatNumber(confirmed)}`);
+        $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`); 
+        $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
         $('.timeElapsed').html(result.Date);
     })
 }
@@ -180,7 +140,7 @@ dataApp.displayChart = (countries, cases) => {
     Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', 'Arial', sans-serif";
     Chart.defaults.global.defaultFontSize = 14;
     new Chart(document.getElementById('barChart'), {
-        type: 'bar',
+        type: 'horizontalBar',
         data: {
             labels: [...countries],
             datasets: [{
@@ -190,18 +150,17 @@ dataApp.displayChart = (countries, cases) => {
                     const index = context.dataIndex; 
                     return index % 2 ? '#5fb6d3' : '#5562b6';
                 }, 
-
                 borderColor: 'rgba(255,111,22,0.6)', 
-                borderWidth: 0
+                borderWidth: 0,
             }],
         },
         options: { 
             layout: {
                 padding: {
-                    left: 20,
-                    right: 20,
-                    top: 20,
-                    bottom: 20
+                    left: 50,
+                    right: 50,
+                    top: 30,
+                    bottom: 30
                 },
             },
             legend: { display: false },
@@ -209,15 +168,39 @@ dataApp.displayChart = (countries, cases) => {
             maintainAspectRatio: false,
             scales: {
                 yAxes: [{
+                    barPercentage: 0.7,
                     ticks: {
-                        beginAtZero: true
-                    }
-                }]
+                        fontSize: 14,
+                    },
+                    gridLines: {
+                        display: false 
+                    }, 
+                }],
+                xAxes: [{
+                    gridLines: {
+                        zeroLineColor: "black",
+                        zeroLineWidth: 1
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Total Confirmed Cases (per thousand)'
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function (value) {
+                            return value + 'K';
+                        },
+                    },
+                }],
+                scaleLabel: {
+                    labelString: 'Total Confirmed Cases by Country (per thousand)',
+                },
             },
             title: {
                 display: true,
-                text: 'Total Confirmed Cases by Country (per thousand)',
-                fontSize: 20,
+                text: 'Top 10 Countries With Most Confirmed Cases',
+                fontSize: 22,
+                fontColor: '#333333'
             }
         }
     });
@@ -240,8 +223,7 @@ dataApp.displayLineGraph = (dates, cases, name) => {
                 label: name,
                 borderColor: "#3e95cd",
                 fill: false
-            }, 
-            ]
+            }],
         },
         options: {
             layout: {
@@ -397,34 +379,6 @@ dataApp.codeToFlag = (countryCode) => {
     return countryCode
     .toUpperCase()
     .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
-}
-
-dataApp.displayLineGraph = (dates, cases, name)=>{
-
-    if (dataApp.lineGraph){
-        dataApp.lineGraph.destroy();
-    }
-
-    const canvas = document.getElementById("timeGraph");
-    const ctx = canvas.getContext('2d');
-    dataApp.lineGraph = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [...dates],
-            datasets: [{
-                data: [...cases],
-                label: name,
-                borderColor: "#3e95cd",
-                fill: false,
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Progression of COVID-19 cases'
-            }
-        }
-    });
 }
 
 // Initialization
