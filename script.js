@@ -401,13 +401,13 @@ dataApp.codeToFlag = (countryCode) => {
 }
 
 
-dataApp.displayLineGraph = (dates,cases,name)=>{
-
-    if(dataApp.lineGraph){
+dataApp.displayLineGraph = (dates, cases, name) => {
+    if (dataApp.lineGraph) {
         dataApp.lineGraph.destroy();
     }
-    dataApp.lineGraph = new Chart(document.getElementById("line-chart"), 
-    {
+    const canvas = document.getElementById("timeGraph");
+    const ctx = canvas.getContext('2d');
+    dataApp.lineGraph = new Chart(ctx, {
         type: 'line',
         data: {
             labels: [...dates],
@@ -415,7 +415,7 @@ dataApp.displayLineGraph = (dates,cases,name)=>{
                 data: [...cases],
                 label: name,
                 borderColor: "#3e95cd",
-                fill: true
+                fill: false,
             }]
         },
         options: {
@@ -425,7 +425,6 @@ dataApp.displayLineGraph = (dates,cases,name)=>{
             }
         }
     });
-
 }
 
 
