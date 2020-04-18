@@ -95,6 +95,7 @@ dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "
 // Display global statistics based on user selection
 dataApp.displayGlobalData = (type) => {
     dataApp.getGlobalData("summary")
+
         .then((result) => {
             const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
             let view;
