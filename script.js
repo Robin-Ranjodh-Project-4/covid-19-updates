@@ -3,8 +3,12 @@ const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
 dataApp.marker = '';
-dataApp.lineGraph = null;
-// dataApp.casesByCCode = {};
+dataApp.lineGraph = null; 
+dataApp.blue = '#30bbdd';
+dataApp.red = '#CD5C5C';
+dataApp.green = '#9ACD32';
+ 
+// dataApp.casesByCCode = {}; 
 dataApp.months = {
     '01': 'Jan',
     '02': 'Feb',
@@ -195,22 +199,19 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
                 {
                 label: '# of Confirmed Cases',
                 data: [...confirmedPerThousand],
-                backgroundColor: '#5fb6d3',
-                borderColor: 'rgba(255,111,22,0.6)',
+                    backgroundColor: dataApp.blue, 
                 borderWidth: 0,
             },
             {
                 label: '# of Confirmed Cases',
                 data: [...deathsPerThousand],
-                backgroundColor: '#ea5b25',
-                borderColor: 'rgba(255,111,22,0.6)',
+                backgroundColor: dataApp.red, 
                 borderWidth: 0,
             },
             {
                 label: '# of Confirmed Cases',
                 data: [...recoveredPerThousand],
-                backgroundColor: '#a9aa00',
-                borderColor: 'rgba(255,111,22,0.6)',
+                backgroundColor: dataApp.green, 
                 borderWidth: 0,
             }
         ],
@@ -280,9 +281,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 // confirmed cases
                 data: [...cCases], //cases 
                 label: 'Confirmed',
-                borderColor: "#5fb6d3",
-                backgroundColor: "#5fb6d3",
-                pointBackgroundColor: "#5fb6d3", 
+                borderColor: dataApp.blue,
+                backgroundColor: dataApp.blue,
+                pointBackgroundColor: dataApp.blue, 
                 pointRadius: 2,
                 fill: false
             },
@@ -290,9 +291,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 // deaths
                 data: [...dCases], //cases 
                 label: 'Deaths',
-                borderColor: "#ea5b25",
-                backgroundColor: "#ea5b25", 
-                pointBackgroundColor: "#ea5b25", 
+                borderColor: dataApp.red,
+                backgroundColor: dataApp.red, 
+                pointBackgroundColor: dataApp.red, 
                 pointRadius: 2,
                 fill: false
             },
@@ -300,9 +301,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 // recovered
                 data: [...rCases], //cases 
                 label: 'Recovered',
-                borderColor: "#a9aa00",
-                backgroundColor: "#a9aa00", 
-                pointBackgroundColor: "#a9aa00",
+                borderColor: dataApp.green,
+                backgroundColor: dataApp.green, 
+                pointBackgroundColor: dataApp.green,
                 pointRadius: 2,
                 fill: false
             },
@@ -576,8 +577,10 @@ dataApp.init = () => {
         dataApp.displayRestCountriesData(countryCode);
     });
 
-    $('form[name="globalForm"]').on('change', function (e) {
-        const casesType = e.target.value;
+    $('button').on('click', function (e) {
+        $('button').removeClass('active');
+        const casesType = e.target.id;
+        $(`#${casesType}`).addClass('active');
         dataApp.displayGlobalData(casesType);
     });
 }
