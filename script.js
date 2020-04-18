@@ -93,6 +93,7 @@ dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "
 dataApp.displayGlobalData = (type) => {
     dataApp.getGlobalData("summary")
     .then((result) => {
+        console.log(result);
         const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
         let view;
         let confirmed;
@@ -116,6 +117,7 @@ dataApp.displayGlobalData = (type) => {
         $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`); 
         $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
         $('.timeElapsed').html(result.Date);
+
     })
 }
 
