@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Covid 19 updates</title>
+    <title>Covid-19 Updates</title>
     <!-- link to the mapquest stylesheet -->
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
     <!-- link to Google Fonts -->
@@ -57,42 +57,42 @@
             </div>
         </section>
 
-        <section class="countryContainer wrapper">
+        <section class="mapContainer wrapper">
             <h2>Cases by Country</h2>
             <div class="map" id="map"></div>
-            <div class="countryContainerContent">
-
-                <form action="#" name="countryForm" autocomplete="off">
-                    <label for="countryList">Make a selection:</label>
-                    <select name="countryList" id="countryList">
-                        <!-- Script file will population options here -->
-                    </select>
-                </form>
-
-                <h3 class="countryName">COVID-19 Updates for <span>Canada</span></h3>
-                <p class="countryPopulation">Population <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
-
-                <div class="countryStats">
-                    <div class="countryConfirmed">
-                        <span><img src="assets/ellipsis.gif" width=20 height=20></span>
-                        <p>Confirmed</p>
-                    </div>
-                
-                    <div class="countryDeaths">
-                        <span><img src="assets/ellipsis.gif" width=20 height=20></span>
-                        <p>Deceased</p>
-                    </div>
-                
-                    <div class="countryRecovered">
-                        <span><img src="assets/ellipsis.gif" width=20 height=20></span>
-                        <p>Recovered</p>
-                    </div>
-                </div>
-            </div>
         </section>
-        <section class="chartSection">
-            <div class="graphContainer">
-                <canvas id="timeGraph"></canvas>
+        
+        <section class="countryContainer">
+            <div class="countryContainerContent wrapper">
+                <div class="textContent">
+                    <form action="#" name="countryForm" autocomplete="off">
+                        <label for="countryList">Make a selection:</label>
+                        <select name="countryList" id="countryList">
+                            <!-- Script file will population options here -->
+                        </select>
+                    </form>
+                    <h3 class="countryName">COVID-19 Updates for <span>Canada</span></h3>
+                    <p class="countryPopulation">Population <span><img src="assets/ellipsis.gif" width=20 height=20></span></p>
+                    <div class="countryStats">
+                        <div class="countryConfirmed">
+                            <span><img src="assets/ellipsis.gif" width=20 height=20></span>
+                            <p>Confirmed</p>
+                        </div>
+                    
+                        <div class="countryDeaths">
+                            <span><img src="assets/ellipsis.gif" width=20 height=20></span>
+                            <p>Deceased</p>
+                        </div>
+                    
+                        <div class="countryRecovered">
+                            <span><img src="assets/ellipsis.gif" width=20 height=20></span>
+                            <p>Recovered</p>
+                        </div>
+                    </div>     
+                </div>
+                <div class="graphContainer">
+                    <canvas id="timeGraph"></canvas>
+                </div>
             </div>
         </section>
         <!-- Add helpful links to COVID19 informational links -->
