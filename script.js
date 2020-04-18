@@ -491,6 +491,7 @@ dataApp.getMap = (lat, lng) => {
             zoomControl: true,
             scrollWheelZoom: false
     }).on('click', dataApp.handleMapClick);
+
 }
 
 // converts country code to flag
