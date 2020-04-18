@@ -92,69 +92,73 @@ dataApp.displayCountryList = () => {
 // Adds white space after every 3rd digit
 dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
 
+//Get formatted time string
+dataApp.formatDate = (date) => {
+    const time = date.slice(11, date.length);
+    const d = new Date(date.slice(0, 9)).toDateString(); 
+    return `${d}, ${time}`; 
+}
+
 // Display global statistics based on user selection
 dataApp.displayGlobalData = (type) => {
     dataApp.getGlobalData("summary")
+    .then((result) => {
+        const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
+        const date = new Date(result.Date).toLocaleString();  
+        
+        let view;
+        let confirmed;
+        let deaths;
+        let recovered;
 
-        .then((result) => {
-            const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
-            let view;
-            let confirmed;
-            let deaths;
-            let recovered;
+        if (type === "totalCases") {
+            view = 'Total';
+            confirmed = TotalConfirmed;
+            deaths = TotalDeaths;
+            recovered = TotalRecovered;
+        } else {
+            view = 'New';
+            confirmed = NewConfirmed;
+            deaths = NewDeaths;
+            recovered = NewRecovered;
+        }
 
-            if (type === "totalCases") {
-                view = 'Total';
-                confirmed = TotalConfirmed;
-                deaths = TotalDeaths;
-                recovered = TotalRecovered;
-            } else {
-                view = 'New';
-                confirmed = NewConfirmed;
-                deaths = NewDeaths;
-                recovered = NewRecovered;
-            }
-
-            $('.viewType').text(view)
-            $('.totalConfirmed span').html(`${dataApp.formatNumber(confirmed)}`);
-            $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`);
-            $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
-            $('.timeElapsed').html(result.Date);
-        })
-}
-
-dataApp.sortCountries = (object) => {
-    const countriesSorted = Object.entries(object).sort(function (a, b) {
-        const aNum = a[1];
-        const bNum = b[1];
-        return bNum - aNum;
-    });
-
-    return countriesSorted;
+        $('.viewType').text(view);
+        $('.totalConfirmed span').html(`${dataApp.formatNumber(confirmed)}`);
+        $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`);
+        $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
+        $('.timeElapsed').html(dataApp.formatDate(date));
+    })
 }
 
 dataApp.displayTopTen = () => {
     dataApp.getGlobalData("summary")
         .then((result) => {
-            const countries = result.Countries;
-            let countryData = {}
+            const countries = result.Countries; 
 
-            countries.forEach((index) => {
-                countryData[index.Country] = index.TotalConfirmed;
+            countries.sort((a, b) => b.TotalConfirmed - a.TotalConfirmed);
+            const topTen = countries.slice(0, 10);
+
+            let confirmed = [];
+            let deaths = [];
+            let recovered = [];
+            let countryNames = [];
+
+            topTen.forEach((country) => {
+                countryNames.push(country.Country)
+                confirmed.push(country.TotalConfirmed);
+                deaths.push(country.TotalDeaths);
+                recovered.push(country.TotalRecovered);
             })
 
-            const countriesSorted = dataApp.sortCountries(countryData);
-            const newArray = Object.values(countriesSorted);
-            const topTenResults = newArray.slice(0, 10);
-
-            const countryNames = topTenResults.map(num => num[0]);
-            const countryCases = topTenResults.map(num => num[1]);
-            dataApp.displayChart(countryNames, countryCases);
+            dataApp.displayChart(countryNames, confirmed, deaths, recovered);
         })
 };
 
-dataApp.displayChart = (countries, cases) => {  
-    const casesPerThousand = cases.map(num => num/1000);
+dataApp.displayChart = (countries, confirmed, deaths, recovered) => {   
+    const confirmedPerThousand = confirmed.map(num => num/1000);
+    const deathsPerThousand = deaths.map(num => num / 1000);
+    const recoveredPerThousand = recovered.map(num => num / 1000);
 
     if (countries.includes("United States of America")) {
         const index = countries.indexOf("United States of America");
@@ -175,16 +179,29 @@ dataApp.displayChart = (countries, cases) => {
         type: 'horizontalBar',
         data: {
             labels: [...countries],
-            datasets: [{
+            datasets: [
+                {
                 label: '# of Confirmed Cases',
-                data: [...casesPerThousand],
-                backgroundColor: function (context) {
-                    const index = context.dataIndex;
-                    return index % 2 ? '#5fb6d3' : '#5562b6';
-                },
+                data: [...confirmedPerThousand],
+                backgroundColor: '#5fb6d3',
                 borderColor: 'rgba(255,111,22,0.6)',
                 borderWidth: 0,
-            }],
+            },
+            {
+                label: '# of Confirmed Cases',
+                data: [...deathsPerThousand],
+                backgroundColor: '#ea5b25',
+                borderColor: 'rgba(255,111,22,0.6)',
+                borderWidth: 0,
+            },
+            {
+                label: '# of Confirmed Cases',
+                data: [...recoveredPerThousand],
+                backgroundColor: '#a9aa00',
+                borderColor: 'rgba(255,111,22,0.6)',
+                borderWidth: 0,
+            }
+        ],
         },
         options: {
             layout: {
@@ -200,7 +217,7 @@ dataApp.displayChart = (countries, cases) => {
             maintainAspectRatio: false,
             scales: {
                 yAxes: [{
-                    barPercentage: 0.7,
+                    barPercentage: 1,
                     ticks: {
                         fontSize: 14,
                     },
@@ -215,7 +232,7 @@ dataApp.displayChart = (countries, cases) => {
                     },
                     scaleLabel: {
                         display: true,
-                        labelString: 'Total Confirmed Cases (per thousand)'
+                        labelString: 'Total Confirmed Cases (thousands)'
                     },
                     ticks: {
                         beginAtZero: true,
@@ -223,14 +240,11 @@ dataApp.displayChart = (countries, cases) => {
                             return value + 'K';
                         },
                     },
-                }],
-                scaleLabel: {
-                    labelString: 'Total Confirmed Cases by Country (per thousand)',
-                },
+                }], 
             },
             title: {
                 display: true,
-                text: ['Top 10 Countries With', 'Most Confirmed Cases'],
+                text: ['Top 10 Countries By', 'Most Confirmed Cases'],
                 fontSize: 22,
                 fontColor: '#333333'
             }
@@ -295,6 +309,10 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                     ticks: {
                         min: 0
                     },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of Cases'
+                    },
                 }],
                 xAxes: [{
                     ticks: {
@@ -314,7 +332,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
             },
             title: {
                 display: true,
-                text: `Progression of Cases for ${name}`,
+                text: ['Progression of Cases for', name],
                 fontSize: 22,
                 fontColor: '#333333'
             }
@@ -500,7 +518,7 @@ dataApp.init = () => {
     });
 
     $('form[name="globalForm"]').on('change', function (e) {
-        const casesType = e.target.value
+        const casesType = e.target.value;
         dataApp.displayGlobalData(casesType);
     });
 }

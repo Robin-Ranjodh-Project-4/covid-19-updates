@@ -403,7 +403,7 @@ option {
 }
 
 .chartContainer {
-  height: 450px;
+  height: 500px;
 }
 
 .graphContainer {
@@ -420,7 +420,7 @@ option {
 @media (max-width: 480px) {
   .graphContainer,
   .chartContainer {
-    height: 400px;
+    height: 450px;
   }
 }
 
