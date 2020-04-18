@@ -3,11 +3,12 @@ const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
 dataApp.marker = '';
-dataApp.lineGraph = null;
+dataApp.lineGraph = null; 
 dataApp.blue = '#30bbdd';
 dataApp.red = '#CD5C5C';
 dataApp.green = '#9ACD32';
-
+ 
+// dataApp.casesByCCode = {}; 
 dataApp.months = {
     '01': 'Jan',
     '02': 'Feb',
@@ -83,11 +84,9 @@ dataApp.displayCountryList = () => {
                 alphaCodes.push(countries[country].ISO2);
                 countryNames.push(countries[country].Country);
             }
-
             alphaCodes.forEach((alphaCode, index) => {
                 selectList.append(`<option value=${alphaCode}>${countryNames[index]}</option>`);
             })
-
             $('option[value="CA"]').attr("selected", "selected");
         })
 }
@@ -96,10 +95,13 @@ dataApp.displayCountryList = () => {
 dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
 
 //Get formatted time string
-dataApp.formatDate = (date) => {
-    const time = date.slice(11, date.length);
-    const d = new Date(date.slice(0, 9)).toDateString(); 
-    return `${d}, ${time}`; 
+dataApp.formatDate = (resultDate) => {
+    
+    const date = new Date(resultDate).toLocaleString();  
+    const dateSliced = date.slice(0, 10);
+    const timeSliced = date.slice(11, date.length);
+    const d = new Date(dateSliced).toDateString(); 
+    return `${d}, ${timeSliced}`; 
 }
 
 // Display global statistics based on user selection
@@ -107,8 +109,6 @@ dataApp.displayGlobalData = (type) => {
     dataApp.getGlobalData("summary")
     .then((result) => {
         const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
-        const date = new Date(result.Date).toLocaleString();  
-        
         let view;
         let confirmed;
         let deaths;
@@ -130,8 +130,21 @@ dataApp.displayGlobalData = (type) => {
         $('.totalConfirmed span').html(`${dataApp.formatNumber(confirmed)}`);
         $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`);
         $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
-        $('.timeElapsed').html(dataApp.formatDate(date));
+        $('.timeElapsed').html(dataApp.formatDate(result.Date));
     })
+}
+dataApp.sortObjectByKey = (object) => {
+    let sorted = {},key, array = [];
+    for (key in object) {
+        if (object.hasOwnProperty(key)) {
+            array.push(key);
+        }
+    }
+    array.sort();
+    for (key = 0; key < array.length; key++) {
+        sorted[array[key]] = object[array[key]];
+    }
+    return sorted;
 }
 
 dataApp.displayTopTen = () => {
@@ -481,17 +494,63 @@ dataApp.handleMapClick = (e) => {
 dataApp.getMap = (lat, lng) => {
     const apiKEY = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
     L.mapquest.key = apiKEY;
+    let baseLayer = L.mapquest.tileLayer('map');
     dataApp.map =
         L.mapquest.map('map', {
             center: [`${lat}`, `${lng}`],
-            layers: L.mapquest.tileLayer('map'),
+            layers: baseLayer,
             zoom: 4,
             maxZoom:8,
             minZoom:3,
             zoomControl: true,
             scrollWheelZoom: false
     }).on('click', dataApp.handleMapClick);
+    L.control.layers({
+        'Map': baseLayer,
+        'Light': L.mapquest.tileLayer('light'),
+        'Dark': L.mapquest.tileLayer('dark')
+    }).addTo(dataApp.map);
+    dataApp.map.addControl(L.mapquest.geocodingControl({
+        position: 'topright',
+        placeMarker:false
+    }));
+    
+    $.when(dataApp.getGlobalData("summary"))
+    .then((result)=>{
 
+        let object = '{';
+        for (country in result.Countries) {
+            // const co = result.Countries[country].Country;
+            const cC = result.Countries[country].CountryCode;
+            const confirmed = result.Countries[country].TotalConfirmed;
+            object = object + `"${cC}" :{ "Confirmed":${confirmed}},`
+        }
+        object = object.slice(0, -1);
+        object = object + "}";
+        const jsonObject = JSON.parse(object);
+        dataApp.casesByCCode = dataApp.sortObjectByKey(jsonObject);
+        const sortedCountriesObject = dataApp.sortObjectByKey(countriesObject);
+
+        setTimeout(function(){
+        for (country in sortedCountriesObject) {
+            // CN country is not appearing in the results
+            if(country !== "CN"){
+            const lat = sortedCountriesObject[country].Lat + "";
+            const lng = sortedCountriesObject[country].Lng + "";
+            const name = sortedCountriesObject[country].Name + "";
+            const cases = dataApp.casesByCCode[country].Confirmed + "";
+            if (lng !== 'undefined') {
+                L.circle(
+                    [lat, lng],
+                    {
+                        radius: 100,
+                    })
+                    .bindPopup(`<strong>${name}</strong> has reported <strong>${cases}</strong> confirmed cases`).addTo(dataApp.map);
+                }
+            }
+        }
+        }, 1000);
+    })
 }
 
 // converts country code to flag
