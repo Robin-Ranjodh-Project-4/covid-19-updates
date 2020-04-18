@@ -259,18 +259,21 @@ ul {
 }
 
 button {
+  border: none;
   background-color: inherit;
   font-family: inherit;
   color: inherit;
 }
 
 a {
-  color: #5fb6d3;
+  color: #30bbdd;
   text-decoration: none;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
 }
 
-a:hover {
-  text-decoration: underline;
+a:hover, a:focus {
+  border-bottom: 1px solid #30bbdd;
 }
 
 input,
@@ -293,16 +296,42 @@ body {
 }
 
 header {
-  padding: 20px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   color: white;
-  background-color: #3b3b3b;
+  height: 400px;
+  width: 100%;
+  padding: 20px 0;
+  background-image: url("./../assets/black-textile-41949.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+header p {
+  font-size: 2.2rem;
+  line-height: 2.6rem;
+  letter-spacing: 1px;
+  margin-top: 15px;
 }
 
 h1 {
-  font-size: 2.2rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-align: center;
+  display: inline;
+  font-family: 'Manrope', serif;
+  font-weight: 400;
+  font-size: 3.4rem;
+  letter-spacing: 1.5px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #30bbdd));
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 3rem;
+  }
 }
 
 h2 {
@@ -334,6 +363,7 @@ h3 {
   min-width: 180px;
   padding: 20px;
   background-color: #f7f7f7;
+  border: 1px solid #dddddd;
   margin: 0 20px;
 }
 
@@ -353,15 +383,8 @@ h3 {
   font-weight: 700;
 }
 
-.mapContainer {
-  padding: 50px 0;
-}
-
-form[name="globalForm"] {
+button {
   font-size: 1.8rem;
-}
-
-form[name="globalForm"] label {
   color: #868686;
   font-weight: 600;
   padding: 2px 0;
@@ -372,16 +395,14 @@ form[name="globalForm"] label {
   transition: all 0.2s;
 }
 
-form[name="globalForm"] label:hover,
-form[name="globalForm"] label:focus,
-form[name="globalForm"] input:checked + label {
+button:hover, button:focus {
   color: black;
   border-bottom: 1.5px solid black;
 }
 
-select,
-option {
-  width: 250px;
+.active {
+  color: black;
+  border-bottom: 1.5px solid black;
 }
 
 .chartSection {
@@ -411,8 +432,10 @@ option {
 }
 
 @media (max-width: 768px) {
-  .graphContainer,
   .chartContainer {
+    width: 80%;
+  }
+  .graphContainer {
     width: 100%;
   }
 }
@@ -441,7 +464,7 @@ option {
 }
 
 .countryContainer h3 span {
-  color: #5fb6d3;
+  color: #30bbdd;
   font-weight: 700;
 }
 
@@ -475,6 +498,7 @@ option {
   margin: 10px 0;
   padding: 20px 0;
   width: 250px;
+  border: 1px solid #dddddd;
   background-color: #ffffff;
 }
 
@@ -502,6 +526,10 @@ option {
   font-weight: 600;
 }
 
+.mapContainer {
+  padding: 50px 0;
+}
+
 .map {
   height: 500px;
 }
@@ -514,7 +542,7 @@ option {
   }
 }
 
-form[name="countryForm"] {
+form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -525,13 +553,15 @@ form[name="countryForm"] {
   margin-bottom: 50px;
 }
 
-form[name="countryForm"] label {
+form label {
   font-size: 2rem;
   margin-bottom: 5px;
 }
 
-select {
+form select {
+  border: 1px solid #dddddd;
   padding: 10px;
+  width: 80%;
 }
 
 @media (max-width: 1120px) {
@@ -558,7 +588,7 @@ select {
   .countryStats div {
     width: 200px;
   }
-  form[name="countryForm"] {
+  form {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
@@ -578,18 +608,21 @@ select {
   }
   .globalStatsContainer div,
   .countryStats div {
-    width: 250px;
+    width: 200px;
+    margin: 0;
   }
   .globalStatsContainer div:nth-of-type(2),
   .countryStats div:nth-of-type(2) {
-    margin: 20px 0;
+    margin: 15px 0;
+  }
+  form select {
+    width: 100%;
   }
 }
 
 footer {
-  border-top: 1px solid #e2e2e2;
   text-align: center;
   padding: 20px 0;
   color: white;
-  background-color: #3b3b3b;
+  background-color: #29283d;
 }

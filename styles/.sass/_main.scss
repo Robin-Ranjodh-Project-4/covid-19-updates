@@ -17,6 +17,7 @@ h3 {font-size: 2.4rem;}
             min-width: 180px;
             padding: 20px;
             background-color: #f7f7f7;
+            border: 1px solid #dddddd;
             margin: 0 20px;
         }
         p {
@@ -34,30 +35,25 @@ h3 {font-size: 2.4rem;}
     }
 }
 
-.mapContainer {padding: 50px 0;}
-
-form[name="globalForm"] {
-    font-size: 1.8rem; 
-    label {
-        color: #868686;
-        font-weight: 600;
-        padding: 2px 0;
-        margin-right: 20px;
-        border-bottom: 1.5px solid transparent;
-        cursor: pointer;
-        transition: all 0.2s; 
-    } 
-    label:hover,
-    label:focus,
-    input:checked + label {
+button {
+    font-size: 1.8rem;
+    color: #868686;
+    font-weight: 600;
+    padding: 2px 0;
+    margin-right: 20px;
+    border-bottom: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s; 
+    &:hover,
+    &:focus {
         color: black;
         border-bottom: 1.5px solid black;
     }
-}
+} 
 
-select,
-option {
-    width: 250px;
+.active {
+    color: black;
+    border-bottom: 1.5px solid black;
 }
 
 .chartSection {
@@ -65,9 +61,7 @@ option {
     padding: 50px 0;
 }
 
-.chartHeader {
-    text-align: center;
-}
+.chartHeader {text-align: center;}
 
 .graphContainer,
 .chartContainer {
@@ -78,26 +72,18 @@ option {
     margin: 0 auto;
 }
  
-.chartContainer { 
-    height: 500px;   
-}
+.chartContainer {height: 500px;}
 
-.graphContainer { 
-    height: 550px;   
-}
+.graphContainer {height: 550px;}
 
-@media (max-width: 768px) { 
-    .graphContainer,   
-    .chartContainer {
-        width: 100%;
-    }
+@media (max-width: 768px) {  
+    .chartContainer {width: 80%;}
+    .graphContainer {width: 100%;}
 }
 
 @media (max-width: 480px) {    
     .graphContainer,
-    .chartContainer {
-        height: 450px;
-    }
+    .chartContainer {height: 450px;}
 } 
 
 .graphSection {padding-bottom: 100px;}
@@ -111,7 +97,7 @@ option {
         line-height: 3.2rem;
         margin-bottom: 10px;
             span {
-                color: #5fb6d3;
+                color: #30bbdd;
                 font-weight: 700;}
     }  
 } 
@@ -135,6 +121,7 @@ option {
             margin: 10px 0;
             padding: 20px 0;
             width: 250px;
+            border: 1px solid #dddddd;
             background-color: #ffffff; 
         } 
         p {
@@ -154,11 +141,11 @@ option {
 
 .countryPopulation {
     font-size: 2rem;
-    span {
-        font-weight: 600;
-    }
+    span {font-weight: 600;}
 }
- 
+
+.mapContainer {padding: 50px 0;}
+
 .map {height: 500px;}
 
 @media (max-width: 768px) {    
@@ -169,47 +156,55 @@ option {
     }
 }
 
-form[name="countryForm"] {
+form {
      display: flex;
      flex-direction: column; 
      margin-bottom: 50px;
      label {
          font-size: 2rem;
          margin-bottom: 5px;
+        }
+    select {
+         border: 1px solid #dddddd;
+         padding: 10px;
+         width: 80%;
      }
 }
 
-select {padding: 10px;}
 
 @media (max-width: 1120px) {    
-    .countryContainerContent {
-        flex-direction: column;
-    }
+
+    .countryContainerContent {flex-direction: column;}
+
     .textContent {
         width: 100%;
         text-align: center;
     }
+
     .countryStats { 
         flex-direction: row;
         justify-content: space-between;
         padding-bottom: 50px;
-        div {
-            width: 200px;
-        }
+        div {width: 200px;}
     }
-    form[name="countryForm"] {
-        align-items: center;
-    }
+
+    form {align-items: center}
 }
 
 @media (max-width: 740px) {   
+
     .globalStatsContainer,
     .countryStats {
         flex-direction: column;
         align-items: center;
-            div {width: 250px;}
+            div {
+                width: 200px;
+                margin: 0;
+            }
             div:nth-of-type(2) {
-                margin: 20px 0;
+                margin: 15px 0;
             }
     }
+
+    form select {width:100%}
 }

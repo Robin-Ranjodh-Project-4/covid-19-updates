@@ -7,7 +7,8 @@
     <!-- link to the mapquest stylesheet -->
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
     <!-- link to Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400&family=Source+Sans+Pro:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <!-- link to Fontawesome -->
     <script src="https://kit.fontawesome.com/f3369905b3.js" crossorigin="anonymous"></script>
     <!-- link to styles -->
@@ -15,21 +16,22 @@
 </head>
 <body>
     <header>
-        <div class="wrapper">
-            <h1>COVID-19 Updates</h1>
+        <div class="wrapper"> 
+            <h1>COVID-19 Updates</h1> 
+            <p>Get an overview of COVID-19 statistics worldwide. Data sourced from <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">Johns Hopkins University, CSSE</a>.</p>
         </div>
     </header>
-
+    
     <main>
+        <div class="imgContainer"> 
+        </div>
         <section class="globalContainer wrapper">
             <h2>Global Reported Cases: <span class="viewType"></span></h2>
 
-            <form action="#" name="globalForm" autocomplete="off">
-                <input class="sr-only" type="radio" name="cases" id="totalCases" value="totalCases" checked>
-                <label for="totalCases">Total Cases</label>
-                <input class="sr-only" type="radio" name="cases" id="newCases" value="newCases">
-                <label for="newCases">New Cases</label>
-            </form>
+            <div class="buttons">
+                <button class="active" id="totalCases">Total Cases</button>
+                <button id="newCases">New Cases</button>
+            </div>
 
             <div class="globalStatsContainer">
                 <div class="totalConfirmed">
@@ -103,7 +105,7 @@
     <footer>
         <div class="wrapper">
             <p>Code and design by <a href="https://www.ranjodhsandhu.com/" target="_blank">Ranjodh Singh</a> and <a href="https://www.robinnong.com" target="_blank">Robin Nong</a>.</p>
-            <p>Data provided by <a href="https://covid19api.com/">COVID19 API</a>, sourced from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins CSSE</a>.</p>
+            <p>Data provided by <a href="https://covid19api.com/">COVID19 API</a>, sourced from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>.</p>
         </div>
     </footer>
     

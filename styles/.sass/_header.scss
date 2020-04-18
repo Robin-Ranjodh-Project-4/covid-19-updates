@@ -1,12 +1,30 @@
 header {
+    display: flex;
+    align-items: center; 
+    color: white; 
+    height: 400px;
+    width: 100%;
     padding: 20px 0;
-    color: white;
-    background-color: rgb(59, 59, 59);
+    background-image: url('./../assets/black-textile-41949.jpg');
+    background-size: cover;
+    background-position: center;
+    p {
+        font-size: 2.2rem;
+        line-height: 2.6rem;
+        letter-spacing: 1px;
+        margin-top: 15px;
+    }
+}
+ 
+h1 {  
+    display: inline;
+    font-family: 'Manrope', serif;
+    font-weight: 400;
+    font-size: 3.4rem;  
+    letter-spacing: 1.5px;  
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
 }
 
-h1 {
-    font-size: 2.2rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-align: center; 
-}
+@media (max-width: 480px) {    
+    h1 {font-size: 3rem;}
+} 

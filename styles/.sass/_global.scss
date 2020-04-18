@@ -20,16 +20,19 @@ html {
 ul {list-style: none;}
 
 button {
+    border: none;
     background-color: inherit;
     font-family: inherit; 
     color: inherit;
 }
 
 a {
-    color: #5fb6d3;
+    color: #30bbdd;
     text-decoration: none;
-    &:hover {text-decoration: underline;}
-}
+    transition: all 0.2s;
+    &:hover,
+    &:focus {border-bottom: 1px solid #30bbdd;} 
+} 
 
 input, 
 fieldset {border: none;}
