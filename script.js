@@ -25,12 +25,12 @@ Chart.defaults.global.defaultFontSize = 14;
 
 // AJAX CALLS - PROMISE OBJECTS
 // return global data promise
-dataApp.getGlobalData = (endPoint) => { 
+dataApp.getGlobalData = (endPoint) => {
     return $.ajax({
         url: `https://api.covid19api.com/${endPoint}`,
-        method:'GET',
-        format:'jsonp' 
-    }) 
+        method: 'GET',
+        format: 'jsonp'
+    })
 }
 // returns the country data promise
 dataApp.getCountryData = function (countryCode) {
@@ -64,30 +64,30 @@ dataApp.getGeoLocation = function (latlng) {
         }
     })
 }
- 
+
 dataApp.displayCountryList = () => {
     const selectList = $('#countryList');
     selectList.empty();
 
     $.when(dataApp.getGlobalData("countries"))
-    .then((countries) => {
-        countries.sort((a, b) => a.Country > b.Country);
+        .then((countries) => {
+            countries.sort((a, b) => a.Country > b.Country);
 
-        let alphaCodes = [];
-        let countryNames = []; 
+            let alphaCodes = [];
+            let countryNames = [];
 
-        for (country in countries) {
-            alphaCodes.push(countries[country].ISO2);
-            countryNames.push(countries[country].Country);
-        }
+            for (country in countries) {
+                alphaCodes.push(countries[country].ISO2);
+                countryNames.push(countries[country].Country);
+            }
 
-        alphaCodes.forEach((alphaCode, index) => {
-            selectList.append(`<option value=${alphaCode}>${countryNames[index]}</option>`);
+            alphaCodes.forEach((alphaCode, index) => {
+                selectList.append(`<option value=${alphaCode}>${countryNames[index]}</option>`);
+            })
+
+            $('option[value="CA"]').attr("selected", "selected");
         })
-
-        $('option[value="CA"]').attr("selected", "selected");
-    })
-}  
+}
 
 // Adds white space after every 3rd digit
 dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
@@ -95,31 +95,31 @@ dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "
 // Display global statistics based on user selection
 dataApp.displayGlobalData = (type) => {
     dataApp.getGlobalData("summary")
-    .then((result) => {
-        const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
-        let view;
-        let confirmed;
-        let deaths;
-        let recovered;
-        
-        if (type === "totalCases") {
-            view = 'Total';
-            confirmed = TotalConfirmed;
-            deaths = TotalDeaths;
-            recovered = TotalRecovered;
-        } else {
-            view = 'New';
-            confirmed =  NewConfirmed;
-            deaths = NewDeaths;
-            recovered = NewRecovered;
-        }
+        .then((result) => {
+            const { NewConfirmed, NewDeaths, NewRecovered, TotalConfirmed, TotalDeaths, TotalRecovered } = result.Global;
+            let view;
+            let confirmed;
+            let deaths;
+            let recovered;
 
-        $('.viewType').text(view)
-        $('.totalConfirmed span').html(`${dataApp.formatNumber(confirmed)}`);
-        $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`); 
-        $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
-        $('.timeElapsed').html(result.Date);
-    })
+            if (type === "totalCases") {
+                view = 'Total';
+                confirmed = TotalConfirmed;
+                deaths = TotalDeaths;
+                recovered = TotalRecovered;
+            } else {
+                view = 'New';
+                confirmed = NewConfirmed;
+                deaths = NewDeaths;
+                recovered = NewRecovered;
+            }
+
+            $('.viewType').text(view)
+            $('.totalConfirmed span').html(`${dataApp.formatNumber(confirmed)}`);
+            $('.totalDeaths span').html(`${dataApp.formatNumber(deaths)}`);
+            $('.totalRecovered span').html(`${dataApp.formatNumber(recovered)}`);
+            $('.timeElapsed').html(result.Date);
+        })
 }
 
 dataApp.sortCountries = (object) => {
@@ -134,22 +134,22 @@ dataApp.sortCountries = (object) => {
 
 dataApp.displayTopTen = () => {
     dataApp.getGlobalData("summary")
-    .then((result) => {
-        const countries = result.Countries;
-        let countryData = {}
+        .then((result) => {
+            const countries = result.Countries;
+            let countryData = {}
 
-        countries.forEach((index) => {
-            countryData[index.Country] = index.TotalConfirmed;
+            countries.forEach((index) => {
+                countryData[index.Country] = index.TotalConfirmed;
+            })
+
+            const countriesSorted = dataApp.sortCountries(countryData);
+            const newArray = Object.values(countriesSorted);
+            const topTenResults = newArray.slice(0, 10);
+
+            const countryNames = topTenResults.map(num => num[0]);
+            const countryCases = topTenResults.map(num => num[1]);
+            dataApp.displayChart(countryNames, countryCases);
         })
-        
-        const countriesSorted = dataApp.sortCountries(countryData);
-        const newArray = Object.values(countriesSorted);
-        const topTenResults = newArray.slice(0, 10); 
-        
-        const countryNames = topTenResults.map(num => num[0]);
-        const countryCases = topTenResults.map(num => num[1]); 
-        dataApp.displayChart(countryNames, countryCases);
-    })
 };
 
 dataApp.displayChart = (countries, cases) => {  
@@ -160,17 +160,17 @@ dataApp.displayChart = (countries, cases) => {
         data: {
             labels: [...countries],
             datasets: [{
-                label: '# of Confirmed Cases', 
+                label: '# of Confirmed Cases',
                 data: [...casesPerThousand],
                 backgroundColor: function (context) {
-                    const index = context.dataIndex; 
+                    const index = context.dataIndex;
                     return index % 2 ? '#5fb6d3' : '#5562b6';
-                }, 
-                borderColor: 'rgba(255,111,22,0.6)', 
+                },
+                borderColor: 'rgba(255,111,22,0.6)',
                 borderWidth: 0,
             }],
         },
-        options: { 
+        options: {
             layout: {
                 padding: {
                     left: 50,
@@ -189,8 +189,8 @@ dataApp.displayChart = (countries, cases) => {
                         fontSize: 14,
                     },
                     gridLines: {
-                        display: false 
-                    }, 
+                        display: false
+                    },
                 }],
                 xAxes: [{
                     gridLines: {
@@ -222,14 +222,14 @@ dataApp.displayChart = (countries, cases) => {
     });
 }
 
-dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {    
+dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
 
-    if (dataApp.lineGraph) { 
+    if (dataApp.lineGraph) {
         dataApp.lineGraph.destroy();
-    } 
+    }
 
     const canvas = document.getElementById("timeGraph");
-    const ctx = canvas.getContext('2d'); 
+    const ctx = canvas.getContext('2d');
     dataApp.lineGraph = new Chart(ctx, {
         type: 'line',
         data: {
@@ -264,7 +264,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 pointRadius: 2,
                 fill: false
             },
-        ], 
+            ],
         },
         options: {
             aspectRatio: 1.4,
@@ -305,55 +305,55 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
         }
     });
 }
- 
+
 dataApp.displayCountryData = (countryCode, countryName) => {
     const receivedCountryPromise = dataApp.getCountryData(countryCode);
     $('.countryName span').html(countryName);
-    
+
     $.when(receivedCountryPromise)
-    .then((caughtCountryData) => {
-        const countryData = caughtCountryData[caughtCountryData.length - 1];
+        .then((caughtCountryData) => {
+            const countryData = caughtCountryData[caughtCountryData.length - 1];
 
-        
-        if (countryData) {
-            const confirmed = dataApp.formatNumber(countryData.Confirmed);
-            const deaths = dataApp.formatNumber(countryData.Deaths);
-            const recovered = dataApp.formatNumber(countryData.Recovered);
-            $('.countryConfirmed span').html(confirmed);
-            $('.countryDeaths span').html(deaths);
-            $('.countryRecovered span').html(recovered);
-        } else {
-            $('.countryConfirmed span').html("0");
-            $('.countryDeaths span').html("0");
-            $('.countryRecovered span').html("0");
-        }
 
-        let cCasesArray = [];
-        let dCasesArray = [];
-        let rCasesArray = [];
-        let countryDatesArray = [];
+            if (countryData) {
+                const confirmed = dataApp.formatNumber(countryData.Confirmed);
+                const deaths = dataApp.formatNumber(countryData.Deaths);
+                const recovered = dataApp.formatNumber(countryData.Recovered);
+                $('.countryConfirmed span').html(confirmed);
+                $('.countryDeaths span').html(deaths);
+                $('.countryRecovered span').html(recovered);
+            } else {
+                $('.countryConfirmed span').html("0");
+                $('.countryDeaths span').html("0");
+                $('.countryRecovered span').html("0");
+            }
 
-        for (key in caughtCountryData) {
-            const date = caughtCountryData[key].Date.slice(5, 10);
-            const formattedMonth = dataApp.convertDatetoMonth(date);
-            const formattedDate = `${formattedMonth} ${date.slice(2, 5)}`;
-            countryDatesArray.push(formattedDate);
-            cCasesArray.push(caughtCountryData[key].Confirmed);
-            dCasesArray.push(caughtCountryData[key].Deaths);
-            rCasesArray.push(caughtCountryData[key].Recovered); 
-        } 
+            let cCasesArray = [];
+            let dCasesArray = [];
+            let rCasesArray = [];
+            let countryDatesArray = [];
 
-        dataApp.displayLineGraph(countryDatesArray, cCasesArray, dCasesArray, rCasesArray, countryName)  
+            for (key in caughtCountryData) {
+                const date = caughtCountryData[key].Date.slice(5, 10);
+                const formattedMonth = dataApp.convertDatetoMonth(date);
+                const formattedDate = `${formattedMonth} ${date.slice(2, 5)}`;
+                countryDatesArray.push(formattedDate);
+                cCasesArray.push(caughtCountryData[key].Confirmed);
+                dCasesArray.push(caughtCountryData[key].Deaths);
+                rCasesArray.push(caughtCountryData[key].Recovered);
+            }
 
-    }).fail((error) => {
-        if (error.statusText === "Not Found"){
-            $('.countryName span').html(countryName);
-            $('.countryConfirmed span').html("0");
-            $('.countryDeaths span').html("0");
-            $('.countryRecovered span').html("0");
-            dataApp.displayLineGraph([], [], countryName);
-        }
-    });
+            dataApp.displayLineGraph(countryDatesArray, cCasesArray, dCasesArray, rCasesArray, countryName)
+
+        }).fail((error) => {
+            if (error.statusText === "Not Found") {
+                $('.countryName span').html(countryName);
+                $('.countryConfirmed span').html("0");
+                $('.countryDeaths span').html("0");
+                $('.countryRecovered span').html("0");
+                dataApp.displayLineGraph([], [], countryName);
+            }
+        });
 }
 
 dataApp.convertDatetoMonth = (date) => {
@@ -362,9 +362,9 @@ dataApp.convertDatetoMonth = (date) => {
 }
 
 dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
-    if(dataApp.map.hasLayer(dataApp.marker)) 
-    dataApp.map.removeLayer(dataApp.marker);
-    
+    if (dataApp.map.hasLayer(dataApp.marker))
+        dataApp.map.removeLayer(dataApp.marker);
+
     if (dataApp.map) {
         const flag = dataApp.codeToFlag(cC);
         dataApp.map.setView(L.latLng(`${lat}`, `${lng}`));
@@ -382,7 +382,7 @@ dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
 
         dataApp.map.addLayer(dataApp.marker);
         dataApp.marker.bindPopup(popUp)
-        .openPopup();
+            .openPopup();
     }
 }
 
@@ -391,21 +391,21 @@ dataApp.displayRestCountriesData = (countryCode) => {
     const receivedRestPromise = dataApp.getRestCountriesData(countryCode);
     const receivedCountryPromise = dataApp.getCountryData(countryCode);
 
-    $.when(receivedRestPromise,receivedCountryPromise)
-    .then((caughtRestData, caughtCountryData ) => {
-        const population = caughtRestData[0].population;
-        const lat = caughtRestData[0].latlng[0];
-        const lng = caughtRestData[0].latlng[1];
-        const name = caughtRestData[0].name;
-        $('.countryPopulation span').html(dataApp.formatNumber(population));
-        
-        if (caughtCountryData[0].length > 0) {
-            const countryData = caughtCountryData[0][caughtCountryData[0].length - 1];
-            const cases = countryData.Confirmed;
-            dataApp.displayOnMap(lat, lng, name, cases, countryCode);
-        } else
-            dataApp.displayOnMap(lat, lng, name, "0", countryCode);
-    });
+    $.when(receivedRestPromise, receivedCountryPromise)
+        .then((caughtRestData, caughtCountryData) => {
+            const population = caughtRestData[0].population;
+            const lat = caughtRestData[0].latlng[0];
+            const lng = caughtRestData[0].latlng[1];
+            const name = caughtRestData[0].name;
+            $('.countryPopulation span').html(dataApp.formatNumber(population));
+
+            if (caughtCountryData[0].length > 0) {
+                const countryData = caughtCountryData[0][caughtCountryData[0].length - 1];
+                const cases = countryData.Confirmed;
+                dataApp.displayOnMap(lat, lng, name, cases, countryCode);
+            } else
+                dataApp.displayOnMap(lat, lng, name, "0", countryCode);
+        });
 }
 
 dataApp.handleMapClick = (e) => {
@@ -414,42 +414,42 @@ dataApp.handleMapClick = (e) => {
     const lng = e.latlng.lng;
     const latlng = lat + "," + lng;
     const receivedGeoLocationPromise = dataApp.getGeoLocation(latlng);
-    
-    $.when(receivedGeoLocationPromise)
-    .then((caughtGeoLocationData) => {
-        let locationsLength = caughtGeoLocationData.results[0].locations.length;
-        
-        if (locationsLength) {
-            const countryCode = caughtGeoLocationData.results[0].locations[0].adminArea1;
-            const countryName = caughtGeoLocationData.results[0].locations[0].adminArea1;
 
-            // XZ, exclude international waters
-            if (countryCode !== 'XZ') {
-                const receivedCountryPromise = dataApp.getCountryData(countryCode);
-                
-                $.when(receivedCountryPromise)
-                .then((caughtCountryData) => {
-                    const countryData = caughtCountryData[caughtCountryData.length - 1];
-                    
-                    if (countryData) {
-                        const name = countryData.Country;
-                        const cases = countryData.Confirmed;
-                        dataApp.displayOnMap(lat, lng, name, cases, countryCode);
-                    } else{
-                        dataApp.displayOnMap(lat,lng, countryName, "0", countryCode);
-                    }
-                })
+    $.when(receivedGeoLocationPromise)
+        .then((caughtGeoLocationData) => {
+            let locationsLength = caughtGeoLocationData.results[0].locations.length;
+
+            if (locationsLength) {
+                const countryCode = caughtGeoLocationData.results[0].locations[0].adminArea1;
+                const countryName = caughtGeoLocationData.results[0].locations[0].adminArea1;
+
+                // XZ, exclude international waters
+                if (countryCode !== 'XZ') {
+                    const receivedCountryPromise = dataApp.getCountryData(countryCode);
+
+                    $.when(receivedCountryPromise)
+                        .then((caughtCountryData) => {
+                            const countryData = caughtCountryData[caughtCountryData.length - 1];
+
+                            if (countryData) {
+                                const name = countryData.Country;
+                                const cases = countryData.Confirmed;
+                                dataApp.displayOnMap(lat, lng, name, cases, countryCode);
+                            } else {
+                                dataApp.displayOnMap(lat, lng, countryName, "0", countryCode);
+                            }
+                        })
+                }
             }
-        }
-    });    
+        });
 }
 
 dataApp.getMap = (lat, lng) => {
     const apiKEY = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
     L.mapquest.key = apiKEY;
-    dataApp.map =  
-    L.mapquest.map('map', {
-            center: [`${lat}`,`${lng}`],
+    dataApp.map =
+        L.mapquest.map('map', {
+            center: [`${lat}`, `${lng}`],
             layers: L.mapquest.tileLayer('map'),
             zoom: 4,
             maxZoom:8,
@@ -462,8 +462,8 @@ dataApp.getMap = (lat, lng) => {
 // converts country code to flag
 dataApp.codeToFlag = (countryCode) => {
     return countryCode
-    .toUpperCase()
-    .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
+        .toUpperCase()
+        .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397));
 }
 
 // Initialization
@@ -473,9 +473,9 @@ dataApp.init = () => {
     dataApp.displayTopTen();
     dataApp.displayCountryData("CA", "Canada");
     dataApp.displayRestCountriesData("CA");
-    dataApp.getMap(60,-95);// pass the coordinates to center map on Canada
+    dataApp.getMap(60, -95);// pass the coordinates to center map on Canada
 
-    $('select#countryList').on('change', function() {
+    $('select#countryList').on('change', function () {
         const countryName = $("#countryList option:selected").text();
         const countryCode = $("#countryList option:selected").val();
 
@@ -483,11 +483,11 @@ dataApp.init = () => {
         dataApp.displayRestCountriesData(countryCode);
     });
 
-    $('form[name="globalForm"]').on('change', function(e){
-        const casesType = e.target.value 
+    $('form[name="globalForm"]').on('change', function (e) {
+        const casesType = e.target.value
         dataApp.displayGlobalData(casesType);
     });
-} 
+}
 
 // Document Ready
 $(() => {
