@@ -156,6 +156,21 @@ dataApp.displayTopTen = () => {
 dataApp.displayChart = (countries, cases) => {  
     const casesPerThousand = cases.map(num => num/1000);
 
+    if (countries.includes("United States of America")) {
+        const index = countries.indexOf("United States of America");
+        countries[index] = "USA";
+    }
+
+    if (countries.includes("Iran, Islamic Republic of")) {
+        const index = countries.indexOf("Iran, Islamic Republic of");
+        countries[index] = "Iran";
+    }
+
+    if (countries.includes("United Kingdom")) {
+        const index = countries.indexOf("United Kingdom");
+        countries[index] = "UK";
+    }
+
     new Chart(document.getElementById('barChart'), {
         type: 'horizontalBar',
         data: {
@@ -174,8 +189,8 @@ dataApp.displayChart = (countries, cases) => {
         options: {
             layout: {
                 padding: {
-                    left: 50,
-                    right: 50,
+                    left: 30,
+                    right: 40,
                     top: 30,
                     bottom: 30
                 },
