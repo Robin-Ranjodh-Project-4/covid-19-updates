@@ -20,6 +20,9 @@ dataApp.months = {
     '12': 'Dec'
 }
 
+Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', 'Arial', sans-serif";
+Chart.defaults.global.defaultFontSize = 14;
+
 // AJAX CALLS - PROMISE OBJECTS
 // return global data promise
 dataApp.getGlobalData = (endPoint) => { 
@@ -151,9 +154,7 @@ dataApp.displayTopTen = () => {
 
 dataApp.displayChart = (countries, cases) => {  
     const casesPerThousand = cases.map(num => num/1000);
-    
-    Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', 'Arial', sans-serif";
-    Chart.defaults.global.defaultFontSize = 14;
+
     new Chart(document.getElementById('barChart'), {
         type: 'horizontalBar',
         data: {
@@ -213,7 +214,7 @@ dataApp.displayChart = (countries, cases) => {
             },
             title: {
                 display: true,
-                text: 'Top 10 Countries With Most Confirmed Cases',
+                text: ['Top 10 Countries With', 'Most Confirmed Cases'],
                 fontSize: 22,
                 fontColor: '#333333'
             }
@@ -237,26 +238,42 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 // confirmed cases
                 data: [...cCases], //cases 
                 label: 'Confirmed',
-                borderColor: "#3e95cd",
+                borderColor: "#5fb6d3",
+                backgroundColor: "#5fb6d3",
+                pointBackgroundColor: "#5fb6d3", 
+                pointRadius: 2,
                 fill: false
             },
             {
                 // deaths
                 data: [...dCases], //cases 
                 label: 'Deaths',
-                borderColor: "red",
+                borderColor: "#ea5b25",
+                backgroundColor: "#ea5b25", 
+                pointBackgroundColor: "#ea5b25", 
+                pointRadius: 2,
                 fill: false
             },
             {
                 // recovered
                 data: [...rCases], //cases 
                 label: 'Recovered',
-                borderColor: "green",
+                borderColor: "#a9aa00",
+                backgroundColor: "#a9aa00", 
+                pointBackgroundColor: "#a9aa00",
+                pointRadius: 2,
                 fill: false
             },
         ], 
         },
         options: {
+            aspectRatio: 1.4,
+            maintainAspectRatio: false,
+            legend: {
+                labels: {
+                    boxWidth: 30,
+                },
+            },
             scales: {
                 yAxes: [{
                     ticks: {
@@ -273,10 +290,10 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
             },
             layout: {
                 padding: {
-                    left: 20,
-                    right: 20,
-                    top: 20,
-                    bottom: 20
+                    left: 30,
+                    right: 30,
+                    top: 30,
+                    bottom: 30
                 },
             },
             title: {
@@ -355,8 +372,8 @@ dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
 
         dataApp.marker = L.marker([`${lat}`, `${lng}`], {
             icon: L.mapquest.icons.marker({
-                primaryColor: '#ff1111',
-                secondaryColor: '#111111',
+                primaryColor: '#5562b6',
+                secondaryColor: '#5562b6',
                 shadow: true,
                 size: 'sm',
                 symbol: ''
@@ -437,7 +454,8 @@ dataApp.getMap = (lat, lng) => {
             zoom: 4,
             maxZoom:8,
             minZoom:3,
-            zoomControl: true
+            zoomControl: true,
+            scrollWheelZoom: false
     }).on('click', dataApp.handleMapClick);
 }
 
