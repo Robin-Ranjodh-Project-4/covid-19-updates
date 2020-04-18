@@ -1,5 +1,3 @@
-main {padding: 100px 0;}
-
 h2 {
     font-size: 3rem;
     margin-bottom: 20px;
@@ -10,15 +8,16 @@ h3 {font-size: 2.4rem;}
 
 .globalContainer {margin-bottom: 50px;}
 
+.countryStats,
 .globalStatsContainer{
     text-align: center;
     padding: 50px 0;
     display: flex;
     justify-content: center;
         div {
-            width: 180px;
+            min-width: 180px;
             padding: 20px;
-            background-color: #f8f8f8;
+            background-color: #f7f7f7;
             margin: 0 20px;
         }
         p {
@@ -36,6 +35,29 @@ h3 {font-size: 2.4rem;}
     }
 }
 
+@media (max-width: 768px) {    
+    .globalStatsContainer { 
+        justify-content: space-between;
+            div { 
+                margin: 0;
+            }
+            div:nth-of-type(2) {
+                margin: 0 20px;
+        }
+    }
+}
+
+@media (max-width: 740px) {  
+    .globalStatsContainer {
+        flex-direction: column;
+        align-items: center;
+            div {width: 250px;}
+            div:nth-of-type(2) {
+                margin: 20px 0;
+            }
+    }
+}
+
 form[name="globalForm"] {
     font-size: 1.8rem; 
     label {
@@ -46,8 +68,7 @@ form[name="globalForm"] {
         border-bottom: 1.5px solid transparent;
         cursor: pointer;
         transition: all 0.2s; 
-    }
-    input{display: none;}
+    } 
     label:hover,
     label:focus,
     input:checked + label {
@@ -61,7 +82,7 @@ option {
     width: 250px;
 }
 
-section.chartSection {
+.chartSection {
     background-color: #f3f3f3;
     padding: 50px 0;
 }
@@ -70,6 +91,7 @@ section.chartSection {
     text-align: center;
 }
 
+.graphContainer,
 .chartContainer {
     background-color: white;
     border: 1px solid #e2e2e2;
@@ -85,16 +107,14 @@ section.chartSection {
     }
 }
 
-.graphContainer {
-    margin-top: 40px;
-    border: 1px solid #e2e2e2;
-    position: relative; 
-    min-height: 400px;  
+@media (max-width: 480px) {    
+    .chartContainer {
+        height: 400px;
+    }
 } 
 
 .countryContainer {
-    margin-top: 50px;
-    display: flex;
+    margin-top: 50px; 
     h3 {
         font-weight: 600;
         margin-bottom: 10px;
@@ -106,15 +126,20 @@ section.chartSection {
 }
 
 .countryContainerContent {
-    width: 60%;
-    padding-right: 40px;
+    text-align: center;
+    h3 {font-size: 2.8rem;}
 }
 
-.map {
-    width: 40%;
+.countryPopulation {
+    font-size: 2rem;
+    span {
+        font-weight: 600;
+    }
 }
-
-.map{height: 500px;}
+ 
+.map{
+    height: 500px;
+}
 
 @media (max-width: 768px) {   
     .countryContainer {
@@ -128,6 +153,17 @@ section.chartSection {
         height: 400px;
         margin-top: 20px;
     }
+}
+
+form[name="countryForm"] {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     margin: 50px 0;
+     label {
+         font-size: 2rem;
+         margin-bottom: 5px;
+     }
 }
 
 select {padding: 10px;}
