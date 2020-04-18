@@ -6,9 +6,8 @@ h2 {
 
 h3 {font-size: 2.4rem;}
 
-.globalContainer {margin-bottom: 50px;}
+.globalContainer {margin: 50px auto;}
 
-.countryStats,
 .globalStatsContainer{
     text-align: center;
     padding: 50px 0;
@@ -35,28 +34,7 @@ h3 {font-size: 2.4rem;}
     }
 }
 
-@media (max-width: 768px) {    
-    .globalStatsContainer { 
-        justify-content: space-between;
-            div { 
-                margin: 0;
-            }
-            div:nth-of-type(2) {
-                margin: 0 20px;
-        }
-    }
-}
-
-@media (max-width: 740px) {  
-    .globalStatsContainer {
-        flex-direction: column;
-        align-items: center;
-            div {width: 250px;}
-            div:nth-of-type(2) {
-                margin: 20px 0;
-            }
-    }
-}
+.mapContainer {padding: 50px 0;}
 
 form[name="globalForm"] {
     font-size: 1.8rem; 
@@ -87,47 +65,91 @@ option {
     padding: 50px 0;
 }
 
-.chartHeader{
+.chartHeader {
     text-align: center;
 }
 
 .graphContainer,
 .chartContainer {
     background-color: white;
-    border: 1px solid #e2e2e2;
-    position: relative; 
-    height: 450px;  
+    border: 1px solid #dddddd;
+    position: relative;  
     width: 600px;
     margin: 0 auto;
 }
+ 
+.chartContainer { 
+    height: 450px;   
+}
 
-@media (max-width: 768px) {    
+.graphContainer { 
+    height: 550px;   
+}
+
+@media (max-width: 768px) { 
+    .graphContainer,   
     .chartContainer {
         width: 100%;
     }
 }
 
 @media (max-width: 480px) {    
+    .graphContainer,
     .chartContainer {
         height: 400px;
     }
 } 
 
+.graphSection {padding-bottom: 100px;}
+
 .countryContainer {
-    margin-top: 50px; 
+    background-color: #f3f3f3; 
+    padding: 100px 0;
     h3 {
         font-weight: 600;
+        font-size: 2.8rem;
+        line-height: 3.2rem;
         margin-bottom: 10px;
             span {
-                color: rgb(16, 118, 165);
+                color: #5fb6d3;
                 font-weight: 700;}
-    } 
-    form{margin-bottom: 20px;}
-}
+    }  
+} 
 
 .countryContainerContent {
-    text-align: center;
-    h3 {font-size: 2.8rem;}
+    display: flex;
+    justify-content: space-between;
+}
+
+.textContent {
+    width: calc(100% - 600px);
+    padding-right: 20px;
+}
+
+.countryStats {  
+    padding-top: 40px;
+    display: flex;  
+    flex-direction: column;
+        div {
+            text-align: center; 
+            margin: 10px 0;
+            padding: 20px 0;
+            width: 250px;
+            background-color: #ffffff; 
+        } 
+        p {
+            margin-top: 6px;
+            font-size: 2rem; 
+        }
+        p:not(:last-of-type) {
+            font-size: 2rem;
+            line-height: 3rem;
+        }
+        span {
+            color: #5562b6;
+            font-size: 3rem;
+            font-weight: 700;
+    }
 }
 
 .countryPopulation {
@@ -137,19 +159,11 @@ option {
     }
 }
  
-.map{
-    height: 500px;
-}
+.map {height: 500px;}
 
-@media (max-width: 768px) {   
-    .countryContainer {
-        flex-direction: column;
-    }
-    .map,
-    .countryContainerContent {
-        width: 100%;
-    }
-    .map{
+@media (max-width: 768px) {    
+    .map {
+        width: 100%;  
         height: 400px;
         margin-top: 20px;
     }
@@ -157,9 +171,8 @@ option {
 
 form[name="countryForm"] {
      display: flex;
-     flex-direction: column;
-     align-items: center;
-     margin: 50px 0;
+     flex-direction: column; 
+     margin-bottom: 50px;
      label {
          font-size: 2rem;
          margin-bottom: 5px;
@@ -167,3 +180,36 @@ form[name="countryForm"] {
 }
 
 select {padding: 10px;}
+
+@media (max-width: 1120px) {    
+    .countryContainerContent {
+        flex-direction: column;
+    }
+    .textContent {
+        width: 100%;
+        text-align: center;
+    }
+    .countryStats { 
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 50px;
+        div {
+            width: 200px;
+        }
+    }
+    form[name="countryForm"] {
+        align-items: center;
+    }
+}
+
+@media (max-width: 740px) {   
+    .globalStatsContainer,
+    .countryStats {
+        flex-direction: column;
+        align-items: center;
+            div {width: 250px;}
+            div:nth-of-type(2) {
+                margin: 20px 0;
+            }
+    }
+}
