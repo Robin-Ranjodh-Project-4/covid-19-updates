@@ -5,6 +5,21 @@ dataApp.map = '';
 dataApp.marker = '';
 dataApp.lineGraph = null;
 
+dataApp.months = {
+    '01': 'Jan',
+    '02': 'Feb',
+    '03': 'Mar',
+    '04': 'Apr',
+    '05': 'May',
+    '06': 'Jun',
+    '07': 'Jul',
+    '08': 'Aug',
+    '09': 'Sep',
+    '10': 'Oct',
+    '11': 'Nov',
+    '12': 'Dec'
+}
+
 // AJAX CALLS - PROMISE OBJECTS
 // return global data promise
 dataApp.getGlobalData = (endPoint) => { 
@@ -206,7 +221,7 @@ dataApp.displayChart = (countries, cases) => {
     });
 }
 
-dataApp.displayLineGraph = (dates, cases, name) => {    
+dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {    
 
     if (dataApp.lineGraph) { 
         dataApp.lineGraph.destroy();
@@ -219,13 +234,43 @@ dataApp.displayLineGraph = (dates, cases, name) => {
         data: {
             labels: [...dates], //dates
             datasets: [{
-                data: [...cases], //cases 
-                label: name,
+                // confirmed cases
+                data: [...cCases], //cases 
+                label: 'Confirmed',
                 borderColor: "#3e95cd",
                 fill: false
-            }],
+            },
+            {
+                // deaths
+                data: [...dCases], //cases 
+                label: 'Deaths',
+                borderColor: "red",
+                fill: false
+            },
+            {
+                // recovered
+                data: [...rCases], //cases 
+                label: 'Recovered',
+                borderColor: "green",
+                fill: false
+            },
+        ], 
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0
+                    },
+                }],
+                xAxes: [{
+                    ticks: {
+                        display: true,
+                        autoSkip: true,
+                        maxTicksLimit: 6
+                    },
+                }],
+            },
             layout: {
                 padding: {
                     left: 20,
@@ -236,7 +281,9 @@ dataApp.displayLineGraph = (dates, cases, name) => {
             },
             title: {
                 display: true,
-                text: 'Progression of Cases'
+                text: `Progression of Cases for ${name}`,
+                fontSize: 22,
+                fontColor: '#333333'
             }
         }
     });
@@ -249,32 +296,52 @@ dataApp.displayCountryData = (countryCode, countryName) => {
     $.when(receivedCountryPromise)
     .then((caughtCountryData) => {
         const countryData = caughtCountryData[caughtCountryData.length - 1];
+
         
         if (countryData) {
-            $('.countryConfirmed span').html(countryData.Confirmed);
-            $('.countryRecovered span').html(countryData.Recovered);
+            const confirmed = dataApp.formatNumber(countryData.Confirmed);
+            const deaths = dataApp.formatNumber(countryData.Deaths);
+            const recovered = dataApp.formatNumber(countryData.Recovered);
+            $('.countryConfirmed span').html(confirmed);
+            $('.countryDeaths span').html(deaths);
+            $('.countryRecovered span').html(recovered);
         } else {
             $('.countryConfirmed span').html("0");
+            $('.countryDeaths span').html("0");
             $('.countryRecovered span').html("0");
         }
 
-        let countryCasesArray = [];
+        let cCasesArray = [];
+        let dCasesArray = [];
+        let rCasesArray = [];
         let countryDatesArray = [];
-        
+
         for (key in caughtCountryData) {
-            countryCasesArray.push(caughtCountryData[key].Confirmed);
-            countryDatesArray.push(caughtCountryData[key].Date.slice(0, 10));
+            const date = caughtCountryData[key].Date.slice(5, 10);
+            const formattedMonth = dataApp.convertDatetoMonth(date);
+            const formattedDate = `${formattedMonth} ${date.slice(2, 5)}`;
+            countryDatesArray.push(formattedDate);
+            cCasesArray.push(caughtCountryData[key].Confirmed);
+            dCasesArray.push(caughtCountryData[key].Deaths);
+            rCasesArray.push(caughtCountryData[key].Recovered); 
         } 
-        
-        dataApp.displayLineGraph(countryDatesArray, countryCasesArray, countryName)  
-    }).fail((error)=>{
-        if(error.statusText === "Not Found"){
+
+        dataApp.displayLineGraph(countryDatesArray, cCasesArray, dCasesArray, rCasesArray, countryName)  
+
+    }).fail((error) => {
+        if (error.statusText === "Not Found"){
             $('.countryName span').html(countryName);
             $('.countryConfirmed span').html("0");
+            $('.countryDeaths span').html("0");
             $('.countryRecovered span').html("0");
-            dataApp.displayLineGraph([],[],countryName);
+            dataApp.displayLineGraph([], [], countryName);
         }
     });
+}
+
+dataApp.convertDatetoMonth = (date) => {
+    const month = date.slice(0, 2);
+    return dataApp.months[month]
 }
 
 dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
@@ -313,7 +380,7 @@ dataApp.displayRestCountriesData = (countryCode) => {
         const lat = caughtRestData[0].latlng[0];
         const lng = caughtRestData[0].latlng[1];
         const name = caughtRestData[0].name;
-        $('.countryPopulation span').html(population);
+        $('.countryPopulation span').html(dataApp.formatNumber(population));
         
         if (caughtCountryData[0].length > 0) {
             const countryData = caughtCountryData[0][caughtCountryData[0].length - 1];
@@ -370,7 +437,7 @@ dataApp.getMap = (lat, lng) => {
             zoom: 4,
             maxZoom:8,
             minZoom:3,
-            zoomControl: false
+            zoomControl: true
     }).on('click', dataApp.handleMapClick);
 }
 
@@ -380,36 +447,6 @@ dataApp.codeToFlag = (countryCode) => {
     .toUpperCase()
     .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0)+127397));
 }
-
-dataApp.displayLineGraph = (dates, cases, name)=>{
-
-
-    if (dataApp.lineGraph){
-        dataApp.lineGraph.destroy();
-    }
-
-    const canvas = document.getElementById("timeGraph");
-    const ctx = canvas.getContext('2d');
-    dataApp.lineGraph = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [...dates],
-            datasets: [{
-                data: [...cases],
-                label: name,
-                borderColor: "#3e95cd",
-                fill: false,
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Progression of COVID-19 cases'
-            }
-        }
-    });
-}
-
 
 // Initialization
 dataApp.init = () => {
