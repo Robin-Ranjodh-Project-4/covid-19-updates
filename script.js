@@ -506,9 +506,9 @@ dataApp.getMap = (lat, lng) => {
         L.mapquest.map('map', {
             center: [`${lat}`, `${lng}`],
             layers: baseLayer,
-            zoom: 1,
-            maxZoom:8,
-            minZoom:1,
+            zoom: 2,
+            maxZoom:10,
+            minZoom:2,
             zoomControl: true,
             scrollWheelZoom: false
     }).on('click', dataApp.handleMapClick);
