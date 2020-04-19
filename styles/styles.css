@@ -305,9 +305,10 @@ header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   color: white;
   height: 400px;
   width: 100%;
@@ -317,11 +318,80 @@ header {
   background-position: center;
 }
 
-header p {
+header p, header a {
   font-size: 2.2rem;
   line-height: 2.6rem;
   letter-spacing: 1px;
   margin-top: 15px;
+}
+
+.heading {
+  -webkit-box-flex: 90%;
+      -ms-flex: 90%;
+          flex: 90%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+nav {
+  -webkit-box-flex: 10%;
+      -ms-flex: 10%;
+          flex: 10%;
+  display: block;
+  width: 100%;
+  justify-self: flex-start;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+}
+
+nav ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  text-align: center;
+  width: 100%;
+}
+
+nav ul li {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding: 0.5rem;
+  margin: 1rem;
+}
+
+nav ul a {
+  color: white;
+  text-decoration: none;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #30bbdd));
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+nav ul a:hover {
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #5562b6));
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #5562b6 35%);
+}
+
+nav ul a:hover,
+nav ul a:focus {
+  border-bottom: none;
 }
 
 h1 {
@@ -332,6 +402,7 @@ h1 {
   letter-spacing: 1.5px;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #30bbdd));
   background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+  line-height: 1.2;
 }
 
 @media (max-width: 480px) {
@@ -654,6 +725,7 @@ form select {
   .graphContainer {
     width: 100%;
   }
+
   .countryContainerContent {
     width: 100%;
   }

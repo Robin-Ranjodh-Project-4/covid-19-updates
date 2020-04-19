@@ -17,7 +17,7 @@ h3 {
     text-align: center;
     padding: 50px 0;
     display: flex;
-    justify-content: center;
+        justify-content: center;
         div {
             min-width: 180px;
             padding: 20px;
@@ -231,7 +231,6 @@ form {
         height: 400px;
         margin-top: 20px;
     }
-   
     .globalStatsContainer,
     .countryStats {
         flex-direction: column;
@@ -282,6 +281,11 @@ form {
     
     .linkText {padding: 30px 10px;}
 }
+
+// For mobile screens
+@media (max-width: 480px) {    
+    .graphContainer {height: 450px; }
+} 
 
 // For mobile screens
 @media (max-width: 480px) {    
