@@ -37,10 +37,14 @@ a {
 input, 
 fieldset {border: none;}
 
-.wrapper{
+.wrapper {
     max-width:1200px;
     width:80%;
     margin:0 auto;
+}
+
+@media (max-width: 768px) {    
+    .wrapper {width: 90%}
 }
 
 body {

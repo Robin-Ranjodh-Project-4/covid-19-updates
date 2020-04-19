@@ -357,6 +357,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
             ],
         },
         options: {
+            tooltips: {
+                mode: 'line'
+            },
             aspectRatio: 1.4,
             maintainAspectRatio: false,
             legend: {
@@ -384,7 +387,11 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                         autoSkip: true,
                         maxTicksLimit: 6,
                         maxRotation: 0,
-                        minRotation: 0
+                    },
+                    gridLines: {
+                        zeroLineColor: "black",
+                        zeroLineWidth: 1
+
                     },
                 }],
             },
