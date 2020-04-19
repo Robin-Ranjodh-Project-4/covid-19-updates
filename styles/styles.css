@@ -287,6 +287,12 @@ fieldset {
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .wrapper {
+    width: 90%;
+  }
+}
+
 body {
   min-width: 350px;
   font-size: 1.6rem;
@@ -341,7 +347,10 @@ h2 {
 }
 
 h3 {
-  font-size: 2.4rem;
+  color: black;
+  font-weight: 600;
+  font-size: 2.8rem;
+  line-height: 3.2rem;
 }
 
 .globalContainer {
@@ -442,9 +451,6 @@ button:hover, button:focus {
 }
 
 .countryContainer h3 {
-  font-weight: 600;
-  font-size: 2.8rem;
-  line-height: 3.2rem;
   margin-bottom: 10px;
 }
 
@@ -534,6 +540,55 @@ form select {
 
 .links {
   padding: 50px 0;
+  font-size: 2rem;
+}
+
+.links a {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-bottom: 2px solid #30bbdd;
+}
+
+.links li {
+  max-width: 800px;
+  height: 150px;
+  margin: 20px 0;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  border: 1px solid #dddddd;
+}
+
+.links li:focus, .links li:hover {
+  -webkit-box-shadow: 0 0 10px 5px #8181812a;
+          box-shadow: 0 0 10px 5px #8181812a;
+  cursor: pointer;
+}
+
+.links p {
+  margin-bottom: 10px;
+}
+
+.links img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.imgContainer {
+  width: 200px;
+  height: 100%;
+}
+
+.linkText {
+  width: calc(100% - 200px - 20px);
+  padding-left: 20px;
 }
 
 @media (max-width: 1120px) {
@@ -599,18 +654,52 @@ form select {
   .graphContainer {
     width: 100%;
   }
+  .countryContainerContent {
+    width: 100%;
+  }
+  .textContent {
+    padding-right: 0;
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  h3 {
+    font-size: 2.4rem;
+  }
+  .links {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+  .links li {
+    height: auto;
+    margin: 30px 0;
+  }
+  .links a {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .linkText,
+  .imgContainer {
+    width: 100%;
+  }
+  .imgContainer {
+    height: 200px;
+  }
+  .linkText {
+    padding: 30px 10px;
+  }
 }
 
 @media (max-width: 480px) {
   .graphContainer {
     height: 450px;
-  }
-  .countryContainerContent {
-    width: 100%;
-  }
-  .textContent {
-    width: 80%;
-    margin: 0 auto;
   }
 }
 
@@ -619,4 +708,10 @@ footer {
   padding: 20px 0;
   color: white;
   background-color: #29283d;
+}
+
+@media (max-width: 480px) {
+  footer {
+    font-size: 1.4rem;
+  }
 }
