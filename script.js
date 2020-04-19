@@ -506,9 +506,9 @@ dataApp.getMap = (lat, lng) => {
         L.mapquest.map('map', {
             center: [`${lat}`, `${lng}`],
             layers: baseLayer,
-            zoom: 4,
+            zoom: 1,
             maxZoom:8,
-            minZoom:3,
+            minZoom:1,
             zoomControl: true,
             scrollWheelZoom: false
     }).on('click', dataApp.handleMapClick);
@@ -517,11 +517,7 @@ dataApp.getMap = (lat, lng) => {
         'Light': L.mapquest.tileLayer('light'),
         'Dark': L.mapquest.tileLayer('dark')
     }).addTo(dataApp.map);
-    dataApp.map.addControl(L.mapquest.geocodingControl({
-        position: 'topright',
-        placeMarker:false
-    }));
-    
+
     $.when(dataApp.getGlobalData("summary"))
     .then((result)=>{
 
@@ -539,24 +535,25 @@ dataApp.getMap = (lat, lng) => {
         const sortedCountriesObject = dataApp.sortObjectByKey(countriesObject);
 
         setTimeout(function(){
-        for (country in sortedCountriesObject) {
-            // CN country is not appearing in the results
-            if(country !== "CN"){
-            const lat = sortedCountriesObject[country].Lat + "";
-            const lng = sortedCountriesObject[country].Lng + "";
-            const name = sortedCountriesObject[country].Name + "";
-            const cases = dataApp.casesByCCode[country].Confirmed + "";
-            if (lng !== 'undefined') {
-                L.circle(
-                    [lat, lng],
-                    {
-                        radius: 100,
-                    })
-                    .bindPopup(`<strong>${name}</strong> has reported <strong>${cases}</strong> confirmed cases`).addTo(dataApp.map);
+            for (country in sortedCountriesObject) {
+                if (dataApp.casesByCCode.hasOwnProperty(country)){
+                    const lat = sortedCountriesObject[country].Lat + "";
+                    const lng = sortedCountriesObject[country].Lng + "";
+                    const name = sortedCountriesObject[country].Name + "";
+                    const cases = dataApp.casesByCCode[country].Confirmed + "";
+                    const flag = dataApp.codeToFlag(country);
+                    if (lng !== 'undefined') {
+                        L.circle(
+                            [lat, lng],
+                            {
+                                radius: `${cases}`,
+                            })
+                    .bindPopup(`${flag}<strong>${name}</strong> has<br><strong>${cases}</strong> confirmed cases`).addTo(dataApp.map)
+                        }
+                    }
                 }
-            }
-        }
-        }, 1000);
+            }, 
+        1000);
     })
 }
 
