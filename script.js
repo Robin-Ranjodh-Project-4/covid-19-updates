@@ -229,7 +229,7 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
                 display: true,
                 position: "bottom",
                 labels: {
-                    padding: 20,
+                    boxWidth: 15,
                 },
              },
             aspectRatio: 2,
@@ -321,7 +321,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
             legend: {
                 position: 'bottom',
                 labels: {
-                    padding: 20,
+                    boxWidth: 15,
                 },
             },
             scales: {
