@@ -5,8 +5,8 @@ dataApp.map = '';
 dataApp.marker = '';
 dataApp.lineGraph = null; 
 dataApp.blue = '#30bbdd';
-dataApp.red = '#CD5C5C';
-dataApp.green = '#9ACD32';
+dataApp.red = '#f55179';
+dataApp.green = '#64d9c1';
  
 // dataApp.casesByCCode = {}; 
 dataApp.months = {
@@ -197,19 +197,19 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
             labels: [...countries],
             datasets: [
                 {
-                label: '# of Confirmed Cases',
+                label: 'Confirmed',
                 data: [...confirmedPerThousand],
                     backgroundColor: dataApp.blue, 
                 borderWidth: 0,
             },
             {
-                label: '# of Confirmed Cases',
+                label: 'Deceased',
                 data: [...deathsPerThousand],
                 backgroundColor: dataApp.red, 
                 borderWidth: 0,
             },
             {
-                label: '# of Confirmed Cases',
+                label: 'Recovered',
                 data: [...recoveredPerThousand],
                 backgroundColor: dataApp.green, 
                 borderWidth: 0,
@@ -225,7 +225,13 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
                     bottom: 30
                 },
             },
-            legend: { display: false },
+            legend: { 
+                display: true,
+                position: "bottom",
+                labels: {
+                    padding: 20,
+                },
+             },
             aspectRatio: 2,
             maintainAspectRatio: false,
             scales: {
@@ -290,7 +296,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
             {
                 // deaths
                 data: [...dCases], //cases 
-                label: 'Deaths',
+                label: 'Deceased',
                 borderColor: dataApp.red,
                 backgroundColor: dataApp.red, 
                 pointBackgroundColor: dataApp.red, 
@@ -313,8 +319,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
             aspectRatio: 1.4,
             maintainAspectRatio: false,
             legend: {
+                position: 'bottom',
                 labels: {
-                    boxWidth: 30,
+                    padding: 20,
                 },
             },
             scales: {
