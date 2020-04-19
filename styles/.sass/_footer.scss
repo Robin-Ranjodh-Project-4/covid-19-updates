@@ -4,3 +4,7 @@ footer {
     color:white;
     background-color: #29283d;
 } 
+
+@media (max-width: 480px) {   
+    footer {font-size: 1.4rem;}
+}
