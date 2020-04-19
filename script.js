@@ -27,6 +27,7 @@ dataApp.months = {
 // Overrides for the Chart.js default settings
 Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', 'Arial', sans-serif";
 Chart.defaults.global.defaultFontSize = 14;
+Chart.defaults.global.hover.intersect = false;
 
 // AJAX CALLS - PROMISE OBJECTS
 // return global data promise
@@ -351,7 +352,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 backgroundColor: dataApp.green, 
                 pointBackgroundColor: dataApp.green,
                 pointRadius: 2,
-                fill: false
+                fill: false,
             },
             ],
         },
@@ -363,6 +364,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 labels: {
                     boxWidth: 15,
                 },
+                tooltips: {
+                    mode: 'dataset'
+                }
             },
             scales: {
                 yAxes: [{
@@ -378,7 +382,9 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                     ticks: {
                         display: true,
                         autoSkip: true,
-                        maxTicksLimit: 6
+                        maxTicksLimit: 6,
+                        maxRotation: 0,
+                        minRotation: 0
                     },
                 }],
             },

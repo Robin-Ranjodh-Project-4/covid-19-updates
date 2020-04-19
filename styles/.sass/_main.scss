@@ -12,7 +12,7 @@ h3 {font-size: 2.4rem;}
     text-align: center;
     padding: 50px 0;
     display: flex;
-    justify-content: center;
+        justify-content: center;
         div {
             min-width: 180px;
             padding: 20px;
@@ -161,9 +161,6 @@ form {
 
 .links {
     padding: 50px 0;
-    ul {
-        
-    }
 }
 
 // For small desktop screens
@@ -192,7 +189,6 @@ form {
         height: 400px;
         margin-top: 20px;
     }
-   
     .globalStatsContainer,
     .countryStats {
         flex-direction: column;
@@ -211,16 +207,18 @@ form {
     .chartContainer,
     .graphContainer {width: 100%;}
 
+    .wrapper{
+        width:90%;
+    }
+    .countryContainerContent {width: 100%;}
+
+    .textContent {
+        width: 90%;
+        margin: 0 auto;
+    }
 } 
 
 // For mobile screens
 @media (max-width: 480px) {    
     .graphContainer {height: 450px; }
-
-    .countryContainerContent {width: 100%;}
-
-    .textContent {
-        width: 80%;
-        margin: 0 auto;
-    }
 } 

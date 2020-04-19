@@ -1,6 +1,6 @@
-header {
+header{
     display: flex;
-    align-items: center; 
+    flex-direction:column;
     color: white; 
     height: 400px;
     width: 100%;
@@ -8,14 +8,52 @@ header {
     background-image: url('./../assets/black-textile-41949.jpg');
     background-size: cover;
     background-position: center;
-    p {
+    p,a {
         font-size: 2.2rem;
         line-height: 2.6rem;
         letter-spacing: 1px;
         margin-top: 15px;
     }
 }
- 
+.heading{
+    flex:90%;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+nav{
+    flex:10%;
+    display:block;
+    width:100%;
+    justify-self: flex-start;
+    align-self: flex-start;
+}
+nav ul{
+    display:flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    text-align:center;
+    width:100%;
+    li{
+        flex:1;
+        padding:0.5rem;
+        margin:1rem;
+    }
+    a{
+        color:white;
+        text-decoration:none;
+        background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+        transition:all 0.3s linear;
+    }
+    a:hover{
+        background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #5562b6 35%);
+    }
+    a:hover,
+    a:focus{
+        border-bottom:none;
+    }
+}
 h1 {  
     display: inline;
     font-family: 'Manrope', serif;
@@ -23,6 +61,7 @@ h1 {
     font-size: 3.4rem;  
     letter-spacing: 1.5px;  
     background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+    line-height:1.2;
 }
 
 @media (max-width: 480px) {    
