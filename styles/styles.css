@@ -432,17 +432,14 @@ button:hover, button:focus {
 }
 
 @media (max-width: 768px) {
-  .chartContainer {
-    width: 80%;
-  }
+  .chartContainer,
   .graphContainer {
     width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .graphContainer,
-  .chartContainer {
+  .graphContainer {
     height: 450px;
   }
 }

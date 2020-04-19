@@ -77,13 +77,12 @@ button {
 .graphContainer {height: 550px;}
 
 @media (max-width: 768px) {  
-    .chartContainer {width: 80%;}
+    .chartContainer,
     .graphContainer {width: 100%;}
 }
 
 @media (max-width: 480px) {    
-    .graphContainer,
-    .chartContainer {height: 450px;}
+    .graphContainer {height: 450px;}
 } 
 
 .graphSection {padding-bottom: 100px;}
