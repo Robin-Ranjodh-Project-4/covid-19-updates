@@ -1,5 +1,6 @@
 const dataApp = {} //namespace object
 
+// GLOBAL VARIABLES
 // property store the map
 dataApp.map = '';
 dataApp.marker = '';
@@ -7,8 +8,7 @@ dataApp.lineGraph = null;
 dataApp.blue = '#30bbdd';
 dataApp.red = '#f55179';
 dataApp.green = '#64d9c1';
- 
-// dataApp.casesByCCode = {}; 
+
 dataApp.months = {
     '01': 'Jan',
     '02': 'Feb',
@@ -24,6 +24,7 @@ dataApp.months = {
     '12': 'Dec'
 }
 
+// Overrides for the Chart.js default settings
 Chart.defaults.global.defaultFontFamily = "'Source Sans Pro', 'Arial', sans-serif";
 Chart.defaults.global.defaultFontSize = 14;
 
@@ -36,6 +37,7 @@ dataApp.getGlobalData = (endPoint) => {
         format: 'jsonp'
     })
 }
+
 // returns the country data promise
 dataApp.getCountryData = function (countryCode) {
     return $.ajax({
@@ -44,6 +46,7 @@ dataApp.getCountryData = function (countryCode) {
         format: 'jsonp'
     });
 }
+
 // returns rest countries data promise
 dataApp.getRestCountriesData = function (countryCode) {
     const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
@@ -57,6 +60,7 @@ dataApp.getRestCountriesData = function (countryCode) {
         }
     });
 }
+
 // returns geo location promise
 dataApp.getGeoLocation = function (latlng) {
     return $.ajax({
@@ -67,6 +71,46 @@ dataApp.getGeoLocation = function (latlng) {
             thumbMaps: false
         }
     })
+}
+
+// Adds white space after every 3rd digit
+dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+
+// Get formatted time string
+dataApp.formatDate = (resultDate) => {
+    const date = new Date(resultDate).toLocaleString();  
+    const dateSliced = date.slice(0, 10);
+    const timeSliced = date.slice(11, date.length);
+    const d = new Date(dateSliced).toDateString(); 
+    return `${d}, ${timeSliced}`; 
+}
+
+// Converts a month as number to the name of month
+dataApp.convertDatetoMonth = (date) => {
+    const month = date.slice(0, 2);
+    return dataApp.months[month]
+}
+
+dataApp.sortObjectByKey = (object) => {
+    let sorted = {},key, array = [];
+    for (key in object) {
+        if (object.hasOwnProperty(key)) {
+            array.push(key);
+        }
+    }
+    array.sort();
+
+    for (key = 0; key < array.length; key++) {
+        sorted[array[key]] = object[array[key]];
+    }
+    return sorted;
+}
+
+// converts country code to flag
+dataApp.codeToFlag = (countryCode) => {
+    return countryCode
+        .toUpperCase()
+        .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397));
 }
 
 dataApp.displayCountryList = () => {
@@ -89,19 +133,6 @@ dataApp.displayCountryList = () => {
             })
             $('option[value="CA"]').attr("selected", "selected");
         })
-}
-
-// Adds white space after every 3rd digit
-dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
-
-//Get formatted time string
-dataApp.formatDate = (resultDate) => {
-    
-    const date = new Date(resultDate).toLocaleString();  
-    const dateSliced = date.slice(0, 10);
-    const timeSliced = date.slice(11, date.length);
-    const d = new Date(dateSliced).toDateString(); 
-    return `${d}, ${timeSliced}`; 
 }
 
 // Display global statistics based on user selection
@@ -133,20 +164,8 @@ dataApp.displayGlobalData = (type) => {
         $('.timeElapsed').html(dataApp.formatDate(result.Date));
     })
 }
-dataApp.sortObjectByKey = (object) => {
-    let sorted = {},key, array = [];
-    for (key in object) {
-        if (object.hasOwnProperty(key)) {
-            array.push(key);
-        }
-    }
-    array.sort();
-    for (key = 0; key < array.length; key++) {
-        sorted[array[key]] = object[array[key]];
-    }
-    return sorted;
-}
 
+// Gets data for top ten country data 
 dataApp.displayTopTen = () => {
     dataApp.getGlobalData("summary")
         .then((result) => {
@@ -171,6 +190,7 @@ dataApp.displayTopTen = () => {
         })
 };
 
+// Displays top ten country data to chart
 dataApp.displayChart = (countries, confirmed, deaths, recovered) => {   
     const confirmedPerThousand = confirmed.map(num => num/1000);
     const deathsPerThousand = deaths.map(num => num / 1000);
@@ -271,8 +291,9 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
     });
 }
 
+// Displays line graph for selected country
 dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
-
+    // Error handling 
     if (dataApp.lineGraph) {
         dataApp.lineGraph.destroy();
     }
@@ -360,6 +381,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
     });
 }
 
+// Displays stats for selected country
 dataApp.displayCountryData = (countryCode, countryName) => {
     const receivedCountryPromise = dataApp.getCountryData(countryCode);
     $('.countryName span').html(countryName);
@@ -367,7 +389,6 @@ dataApp.displayCountryData = (countryCode, countryName) => {
     $.when(receivedCountryPromise)
         .then((caughtCountryData) => {
             const countryData = caughtCountryData[caughtCountryData.length - 1];
-
 
             if (countryData) {
                 const confirmed = dataApp.formatNumber(countryData.Confirmed);
@@ -410,11 +431,6 @@ dataApp.displayCountryData = (countryCode, countryName) => {
         });
 }
 
-dataApp.convertDatetoMonth = (date) => {
-    const month = date.slice(0, 2);
-    return dataApp.months[month]
-}
-
 dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
     if (dataApp.map.hasLayer(dataApp.marker))
         dataApp.map.removeLayer(dataApp.marker);
@@ -435,8 +451,7 @@ dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
         });
 
         dataApp.map.addLayer(dataApp.marker);
-        dataApp.marker.bindPopup(popUp)
-            .openPopup();
+        dataApp.marker.bindPopup(popUp).openPopup();
     }
 }
 
@@ -522,8 +537,7 @@ dataApp.getMap = (lat, lng) => {
     .then((result)=>{
 
         let object = '{';
-        for (country in result.Countries) {
-            // const co = result.Countries[country].Country;
+        for (country in result.Countries) { 
             const cC = result.Countries[country].CountryCode;
             const confirmed = result.Countries[country].TotalConfirmed;
             object = object + `"${cC}" :{ "Confirmed":${confirmed}},`
@@ -548,7 +562,7 @@ dataApp.getMap = (lat, lng) => {
                             {
                                 radius: `${cases}`,
                             })
-                    .bindPopup(`${flag}<strong>${name}</strong> has<br><strong>${cases}</strong> confirmed cases`).addTo(dataApp.map)
+                    .bindPopup(`${flag} <strong>${name}</strong> has<br><strong>${cases}</strong> confirmed cases`).addTo(dataApp.map)
                         }
                     }
                 }
@@ -557,21 +571,15 @@ dataApp.getMap = (lat, lng) => {
     })
 }
 
-// converts country code to flag
-dataApp.codeToFlag = (countryCode) => {
-    return countryCode
-        .toUpperCase()
-        .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397));
-}
-
 // Initialization
 dataApp.init = () => {
+    // On page load: 
     dataApp.displayCountryList();
     dataApp.displayGlobalData("totalCases");
-    dataApp.displayTopTen();
+    dataApp.displayTopTen(); // Displays bar chart
     dataApp.displayCountryData("CA", "Canada");
     dataApp.displayRestCountriesData("CA");
-    dataApp.getMap(60, -95);// pass the coordinates to center map on Canada
+    dataApp.getMap(60, -95); // Pass the coordinates to center map on Canada
 
     $('select#countryList').on('change', function () {
         const countryName = $("#countryList option:selected").text();
@@ -581,6 +589,7 @@ dataApp.init = () => {
         dataApp.displayRestCountriesData(countryCode);
     });
 
+    // On clicking Total Cases and New Cases buttons:
     $('button').on('click', function (e) {
         $('button').removeClass('active');
         const casesType = e.target.id;
@@ -589,7 +598,7 @@ dataApp.init = () => {
     });
 }
 
-// Document Ready
+// DOCUMENT READY
 $(() => {
     dataApp.init();
 })

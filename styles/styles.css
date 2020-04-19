@@ -410,10 +410,6 @@ button:hover, button:focus {
   padding: 50px 0;
 }
 
-.chartHeader {
-  text-align: center;
-}
-
 .graphContainer,
 .chartContainer {
   background-color: white;
@@ -431,21 +427,13 @@ button:hover, button:focus {
   height: 550px;
 }
 
-@media (max-width: 768px) {
-  .chartContainer,
-  .graphContainer {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .graphContainer {
-    height: 450px;
-  }
-}
-
-.graphSection {
-  padding-bottom: 100px;
+.countryContainerContent {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .countryContainer {
@@ -465,22 +453,13 @@ button:hover, button:focus {
   font-weight: 700;
 }
 
-.countryContainerContent {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
 .textContent {
   width: calc(100% - 600px);
   padding-right: 20px;
 }
 
 .countryStats {
-  padding-top: 40px;
+  padding-top: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -531,14 +510,6 @@ button:hover, button:focus {
   height: 500px;
 }
 
-@media (max-width: 768px) {
-  .map {
-    width: 100%;
-    height: 400px;
-    margin-top: 20px;
-  }
-}
-
 form {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -559,6 +530,10 @@ form select {
   border: 1px solid #dddddd;
   padding: 10px;
   width: 80%;
+}
+
+.links {
+  padding: 50px 0;
 }
 
 @media (max-width: 1120px) {
@@ -592,7 +567,12 @@ form select {
   }
 }
 
-@media (max-width: 740px) {
+@media (max-width: 768px) {
+  .map {
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
+  }
   .globalStatsContainer,
   .countryStats {
     -webkit-box-orient: vertical;
@@ -614,6 +594,23 @@ form select {
   }
   form select {
     width: 100%;
+  }
+  .chartContainer,
+  .graphContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .graphContainer {
+    height: 450px;
+  }
+  .countryContainerContent {
+    width: 100%;
+  }
+  .textContent {
+    width: 80%;
+    margin: 0 auto;
   }
 }
 

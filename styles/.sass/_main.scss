@@ -35,6 +35,7 @@ h3 {font-size: 2.4rem;}
     }
 }
 
+// Buttons for Total Cases and New Cases
 button {
     font-size: 1.8rem;
     color: #868686;
@@ -51,18 +52,19 @@ button {
     }
 } 
 
+// Toggle style for active view type button
 .active {
     color: black;
     border-bottom: 1.5px solid black;
 }
 
+// Section for bar chart
 .chartSection {
     background-color: #f3f3f3;
     padding: 50px 0;
-}
+} 
 
-.chartHeader {text-align: center;}
-
+// Graph containers
 .graphContainer,
 .chartContainer {
     background-color: white;
@@ -71,22 +73,18 @@ button {
     width: 600px;
     margin: 0 auto;
 }
- 
-.chartContainer {height: 500px;}
 
+// Graphs 
+.chartContainer {height: 500px;}
 .graphContainer {height: 550px;}
 
-@media (max-width: 768px) {  
-    .chartContainer,
-    .graphContainer {width: 100%;}
+// Flex container for country data and line graph
+.countryContainerContent {
+    display: flex;
+    justify-content: space-between;
 }
 
-@media (max-width: 480px) {    
-    .graphContainer {height: 450px;}
-} 
-
-.graphSection {padding-bottom: 100px;}
-
+// Left side container for country stats
 .countryContainer {
     background-color: #f3f3f3; 
     padding: 100px 0;
@@ -101,18 +99,15 @@ button {
     }  
 } 
 
-.countryContainerContent {
-    display: flex;
-    justify-content: space-between;
-}
-
+// Container for text inside of country stats section
 .textContent {
     width: calc(100% - 600px);
     padding-right: 20px;
 }
 
+// Country stats for confirmed, deceased and recovered cases
 .countryStats {  
-    padding-top: 40px;
+    padding-top: 20px;
     display: flex;  
     flex-direction: column;
         div {
@@ -138,23 +133,17 @@ button {
     }
 }
 
+// Country population
 .countryPopulation {
     font-size: 2rem;
     span {font-weight: 600;}
 }
 
+// Map
 .mapContainer {padding: 50px 0;}
-
 .map {height: 500px;}
 
-@media (max-width: 768px) {    
-    .map {
-        width: 100%;  
-        height: 400px;
-        margin-top: 20px;
-    }
-}
-
+// Drop down form for countries list
 form {
      display: flex;
      flex-direction: column; 
@@ -170,9 +159,15 @@ form {
      }
 }
 
+.links {
+    padding: 50px 0;
+    ul {
+        
+    }
+}
 
+// For small desktop screens
 @media (max-width: 1120px) {    
-
     .countryContainerContent {flex-direction: column;}
 
     .textContent {
@@ -190,8 +185,14 @@ form {
     form {align-items: center}
 }
 
-@media (max-width: 740px) {   
-
+// For tablet screens
+@media (max-width: 768px) {    
+    .map {
+        width: 100%;  
+        height: 400px;
+        margin-top: 20px;
+    }
+   
     .globalStatsContainer,
     .countryStats {
         flex-direction: column;
@@ -206,4 +207,19 @@ form {
     }
 
     form select {width:100%}
-}
+
+    .chartContainer,
+    .graphContainer {width: 100%;}
+} 
+
+// For mobile screens
+@media (max-width: 480px) {    
+    .graphContainer {height: 450px; }
+
+    .countryContainerContent {width: 100%;}
+
+    .textContent {
+        width: 80%;
+        margin: 0 auto;
+    }
+} 
