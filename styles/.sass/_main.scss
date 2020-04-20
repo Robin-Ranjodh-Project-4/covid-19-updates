@@ -150,7 +150,8 @@ h3 {
     & > div {
         display: flex;
         justify-content: space-between;
-        flex-wrap: wrap;
+        flex-wrap: wrap; 
+        z-index: 0;
     }
 }
 .map {height: 500px;}
