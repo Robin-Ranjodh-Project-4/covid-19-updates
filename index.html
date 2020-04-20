@@ -17,11 +17,13 @@
 <body>
     <header>
         <nav class="wrapper topNav">
+            <button class="mobile-menu" aria-label="Click to toggle navigation menu">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
             <ul>
                 <li><a href="#global">Global Cases</a></li>
                 <li><a href="#topTen">Top Ten</a></li>
                 <li><a href="#worldMap">Cases By Country</a></li>
-                <li><a href="#country">Select Country</a></li>
                 <li><a href="#helpful">Helpful Links</a></li>
             </ul>
         </nav>
@@ -35,7 +37,7 @@
         <section class="globalContainer wrapper">
             <h2>Global Reported Cases: <span class="viewType"></span></h2>
 
-            <div class="buttons">
+            <div class="toggleButtons">
                 <button class="active" id="totalCases">Total Cases</button>
                 <button id="newCases">New Cases</button>
             </div>

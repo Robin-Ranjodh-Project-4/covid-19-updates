@@ -226,6 +226,12 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
         const index = countries.indexOf("United Kingdom");
         countries[index] = "UK";
     }
+
+    if (countries.includes("Russian Federation")) {
+        const index = countries.indexOf("Russian Federation");
+        countries[index] = "Russia";
+    }
+
     // get new chart on the html tag #barChart (chart.js)
     new Chart(document.getElementById('barChart'), {
         type: 'horizontalBar',
@@ -635,6 +641,22 @@ dataApp.bindCasesToMap = (sortedCountriesObject)=>{
     }
 }
 
+// Mobile nav menu
+dataApp.toggleMenu = () => {
+    $('nav ul').toggleClass('showMenu'); // show/hide menu 
+    $('body').toggleClass("positionFixed"); // Prevents scrolling when side bar is open
+    $('button i').toggleClass("fa-times");
+    //On clicking outside the mobile nav
+    $('body').on('click', function (e) {
+        //Hide nav if click event on nav menu not registered
+        if (e.target.closest('nav') === null) {
+            $('nav ul').removeClass('showMenu');
+            $('body').removeClass("positionFixed"); 
+            $('button i').removeClass("fa-times");
+        }
+    });
+}
+
 // Initialization
 dataApp.init = () => {
     // On page load: 
@@ -656,14 +678,18 @@ dataApp.init = () => {
     });
 
     // On clicking Total Cases and New Cases buttons:
-    $('button').on('click', function (e) {
-        $('button').removeClass('active');
+    $('.toggleButtons button').on('click', function (e) {
+        $('.toggleButtons button').removeClass('active');
         const casesType = e.target.id;
         $(`#${casesType}`).addClass('active');
         dataApp.displayGlobalData(casesType);
     });
     // attach click event to the map
     dataApp.map.on('click', dataApp.handleMapClick);
+
+    // toggle mobile nav menu
+    $('nav button').on('click', dataApp.toggleMenu);
+    $('nav li').on('click', dataApp.toggleMenu); 
 }
 
 // DOCUMENT READY
