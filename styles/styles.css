@@ -375,15 +375,15 @@ nav ul li {
 nav ul a {
   color: white;
   text-decoration: none;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #30bbdd));
-  background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(80%, rgba(255, 255, 255, 0)), color-stop(20%, #30bbdd));
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 80%, #30bbdd 20%);
   -webkit-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
 
 nav ul a:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #5562b6));
-  background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #5562b6 35%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(80%, rgba(255, 255, 255, 0)), color-stop(20%, #5562b6));
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 80%, #5562b6 20%);
 }
 
 nav ul a:hover, nav ul a:focus {
@@ -418,8 +418,8 @@ h1 {
   font-weight: 400;
   font-size: 3.4rem;
   letter-spacing: 1.5px;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(65%, rgba(255, 255, 255, 0)), color-stop(35%, #30bbdd));
-  background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(80%, rgba(255, 255, 255, 0)), color-stop(20%, #30bbdd));
+  background-image: linear-gradient(rgba(255, 255, 255, 0) 80%, #30bbdd 20%);
   line-height: 1.2;
 }
 
@@ -630,18 +630,28 @@ h3 {
   padding: 50px 0;
 }
 
+.mapContainer h2 {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 300px;
+          flex: 0 0 300px;
+}
+
+.mapContainer > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
 .map {
   height: 500px;
 }
 
 form {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
   margin-bottom: 50px;
 }
 
@@ -654,7 +664,7 @@ form select, form option {
   cursor: pointer;
   border: 1px solid #dddddd;
   padding: 10px;
-  width: 80%;
+  width: 100%;
 }
 
 .links {

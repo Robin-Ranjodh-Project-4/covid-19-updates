@@ -44,9 +44,9 @@ nav ul {
     a {
         color:white;
         text-decoration:none;
-        background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+        background-image: linear-gradient(rgba(255, 255, 255, 0) 80%, #30bbdd 20%);
         transition:all 0.3s linear;
-            &:hover {background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #5562b6 35%);}
+            &:hover {background-image: linear-gradient(rgba(255, 255, 255, 0) 80%, #5562b6 20%);}
             &:hover,
             &:focus {border-bottom:none;}
     }
@@ -74,7 +74,7 @@ h1 {
     font-weight: 400;
     font-size: 3.4rem;  
     letter-spacing: 1.5px;  
-    background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 80%, #30bbdd 20%);
     line-height: 1.2;
 }
 
