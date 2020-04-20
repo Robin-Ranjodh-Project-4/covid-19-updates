@@ -41,8 +41,7 @@ h3 {
 }
 
 // Buttons for Total Cases and New Cases
-.toggleButtons {
-    button {
+.toggleButtons button {
     font-size: 1.8rem;
     color: #868686;
     font-weight: 600;
@@ -56,12 +55,12 @@ h3 {
         color: black;
         border-bottom: 1.5px solid black;
     }
-    } 
-}
+} 
+
     
 
 // Toggle style for active view type button
-.active {
+.toggleButtons .active {
     color: black;
     border-bottom: 1.5px solid black;
 }

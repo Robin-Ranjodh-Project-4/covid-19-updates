@@ -526,7 +526,7 @@ h3 {
   border-bottom: 1.5px solid black;
 }
 
-.active {
+.toggleButtons .active {
   color: black;
   border-bottom: 1.5px solid black;
 }
