@@ -1,4 +1,4 @@
-header{
+header {
     display: flex;
     flex-direction:column;
     color: white; 
@@ -8,52 +8,66 @@ header{
     background-image: url('./../assets/black-textile-41949.jpg');
     background-size: cover;
     background-position: center;
-    p,a {
+    p, a {
         font-size: 2.2rem;
         line-height: 2.6rem;
         letter-spacing: 1px;
         margin-top: 15px;
     }
 }
-.heading{
+
+.heading {
     flex:90%;
     display:flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
 }
-nav{
-    flex:10%;
-    display:block;
-    width:100%;
+
+nav {
+    flex: 10%;
+    display: block;
+    width: 100%;
     justify-self: flex-start;
     align-self: flex-start;
 }
-nav ul{
-    display:flex;
+
+nav ul {
+    display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    text-align:center;
-    width:100%;
-    li{
-        flex:1;
-        padding:0.5rem;
-        margin:1rem;
+    text-align: center;
+    li { 
+        padding: 5px;
+        margin: 10px;
     }
-    a{
+    a {
         color:white;
         text-decoration:none;
         background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
         transition:all 0.3s linear;
-    }
-    a:hover{
-        background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #5562b6 35%);
-    }
-    a:hover,
-    a:focus{
-        border-bottom:none;
+            &:hover {background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #5562b6 35%);}
+            &:hover,
+            &:focus {border-bottom:none;}
     }
 }
+
+.mobile-menu {
+    font-size: 2.6rem;
+    height: 0;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    cursor: pointer;
+    overflow: hidden;
+    + input {
+        display: none;
+    }
+}
+
+.positionFixed {position: fixed;}
+.showMenu{right: 0px;}
+
 h1 {  
     display: inline;
     font-family: 'Manrope', serif;
@@ -61,8 +75,33 @@ h1 {
     font-size: 3.4rem;  
     letter-spacing: 1.5px;  
     background-image: linear-gradient(rgba(255, 255, 255, 0) 65%, #30bbdd 35%);
-    line-height:1.2;
+    line-height: 1.2;
 }
+
+@media (max-width: 796px) {    
+    .mobile-menu {
+        height: auto;
+        overflow: visible;
+        z-index: 20;
+    } 
+
+    nav ul {       
+        background-color: #29283d;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        width: 250px;
+        height: 100vh;
+
+        position: fixed;
+        top: 0;
+        right: -250px; 
+            
+        z-index: 10;
+        transition: all 0.5s; 
+    } 
+} 
 
 @media (max-width: 480px) {    
     h1 {font-size: 3rem;}
