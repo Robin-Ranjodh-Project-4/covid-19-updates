@@ -359,16 +359,17 @@ nav ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   text-align: center;
 }
 
 nav ul li {
-  padding: 5px;
-  margin: 10px;
+  cursor: pointer;
+  margin: 10px 0;
 }
 
 nav ul a {
@@ -649,7 +650,8 @@ form label {
   margin-bottom: 5px;
 }
 
-form select {
+form select, form option {
+  cursor: pointer;
   border: 1px solid #dddddd;
   padding: 10px;
   width: 80%;
@@ -815,6 +817,20 @@ form select {
 }
 
 @media (max-width: 480px) {
+  .globalStatsContainer,
+  .countryStats {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .globalStatsContainer div,
+  .countryStats div {
+    width: 100%;
+  }
   .graphContainer {
     height: 450px;
   }

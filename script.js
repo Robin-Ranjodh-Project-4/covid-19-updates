@@ -80,7 +80,7 @@ dataApp.getGeoLocation = function (latlng) {
 
 // Adds white space after every 3rd digit
 // Params: @Number
-dataApp.formatNumber = (num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+dataApp.formatNumber = (num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')); 
 
 // Get formatted time string in format (Sat Apr 18 2020, 9:05:03 a.m) from json date
 // Params: @Date - json format
