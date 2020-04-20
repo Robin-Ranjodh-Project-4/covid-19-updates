@@ -299,6 +299,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   line-height: 2.2rem;
   color: #333333;
+  display: relative;
 }
 
 header {
@@ -391,17 +392,14 @@ nav ul a:hover, nav ul a:focus {
 }
 
 .mobile-menu {
+  color: #30bbdd;
   font-size: 2.6rem;
   height: 0;
-  position: absolute;
+  position: fixed;
   top: 20px;
-  right: 25px;
+  left: 25px;
   cursor: pointer;
   overflow: hidden;
-}
-
-.mobile-menu + input {
-  display: none;
 }
 
 .positionFixed {
@@ -446,7 +444,7 @@ h1 {
     position: fixed;
     top: 0;
     right: -250px;
-    z-index: 10;
+    z-index: 20;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
   }
@@ -645,6 +643,7 @@ h3 {
           justify-content: space-between;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  z-index: 0;
 }
 
 .map {

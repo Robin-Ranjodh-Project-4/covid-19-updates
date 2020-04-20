@@ -636,12 +636,9 @@ dataApp.bindCasesToMap = (sortedCountriesObject)=>{
 
 // Mobile nav menu
 dataApp.toggleMenu = () => {
-    const mqlMobile = window.matchMedia('(max-width: 796px)'); // media query list
-    if (mqlMobile.matches === true) {
+
         $('nav ul').toggleClass('showMenu'); // show/hide menu 
-        $('body').toggleClass("positionFixed"); // Prevents scrolling when side bar is open
         $('button i').toggleClass("fa-times");
-    }
     //On clicking outside the mobile nav
     $('body').on('click', function (e) {
         //Hide nav if click event on nav menu not registered
