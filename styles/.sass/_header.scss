@@ -34,12 +34,12 @@ nav {
 
 nav ul {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     flex-wrap: wrap;
     text-align: center;
-    li { 
-        padding: 5px;
-        margin: 10px;
+    li {  
+        cursor: pointer;
+        margin: 10px 0;
     }
     a {
         color:white;
