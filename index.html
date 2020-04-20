@@ -32,8 +32,8 @@
             <p>Get an overview of COVID-19 statistics worldwide. Data sourced from <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">Johns Hopkins University, CSSE</a>.</p>
         </div>
     </header>
-    
-    <main> 
+
+    <main id="global" > 
         <section class="globalContainer wrapper">
             <h2>Global Reported Cases: <span class="viewType"></span></h2>
 
@@ -47,12 +47,12 @@
                     <span><img src="assets/ellipsis.gif" width=20 height=20></span>
                     <p>Confirmed</p>
                 </div>
-    
+
                 <div class="totalDeaths">
                     <span><img src="assets/ellipsis.gif" width=20 height=20></span>
                     <p>Deceased</p>
                 </div>
-    
+
                 <div class="totalRecovered">
                     <span><img src="assets/ellipsis.gif" width=20 height=20></span>
                     <p>Recovered</p>
@@ -61,7 +61,7 @@
 
             <p>Last Updated: <span class="timeElapsed"><img src="assets/ellipsis.gif" width=20 height=20></span></p>
         </section>
-        
+
         <section class="chartSection" id="topTen">
             <div class="chartContainer">
                 <canvas id="barChart"></canvas>
