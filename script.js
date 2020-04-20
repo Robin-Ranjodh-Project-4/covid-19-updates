@@ -129,22 +129,14 @@ dataApp.codeToFlag = (countryCode) => {
 dataApp.displayCountryList = () => {
     const selectList = $('#countryList');
     selectList.empty();
-    $.when(dataApp.getGlobalData("countries"))
-        .then((countries) => {
-            countries.sort((a, b) => a.Country > b.Country);
 
-            let alphaCodes = [];
-            let countryNames = [];
-
-            for (country in countries) {
-                alphaCodes.push(countries[country].ISO2);
-                countryNames.push(countries[country].Country);
-            }
-            alphaCodes.forEach((alphaCode, index) => {
-                selectList.append(`<option value=${alphaCode}>${countryNames[index]}</option>`);
-            })
-            $('option[value="CA"]').attr("selected", "selected");
-        })
+    for ( country in countriesObject ) {
+        if (country != "UM") {
+            const countryName = countriesObject[country].Name
+            selectList.append(`<option value=${country}>${countryName}</option>`);
+        }
+    }
+    $('option[value="CA"]').attr("selected", "selected");
 }
 
 // Display global statistics based on user selection
@@ -211,6 +203,7 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
     const confirmedPerThousand = confirmed.map(num => num/1000);
     const deathsPerThousand = deaths.map(num => num / 1000);
     const recoveredPerThousand = recovered.map(num => num / 1000);
+
     // shorten the country Names
     if (countries.includes("United States of America")) {
         const index = countries.indexOf("United States of America");
@@ -233,7 +226,7 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
     }
 
     // get new chart on the html tag #barChart (chart.js)
-    new Chart(document.getElementById('barChart'), {
+    dataApp.barChart = new Chart(document.getElementById('barChart'), {
         type: 'horizontalBar',
         data: {
             labels: [...countries],
