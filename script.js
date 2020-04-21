@@ -85,12 +85,10 @@ dataApp.formatNumber = (num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g,
 // Get formatted time string in format (Sat Apr 18 2020, 9:05:03 a.m) from json date
 // Params: @Date - json format
 dataApp.formatDate = (resultDate) => {
-    const date = new Date(resultDate).toLocaleString();  
-    const dateSliced = date.slice(0, 10);
-    const timeSliced = date.slice(11, date.length);
-    const d = new Date(dateSliced).toDateString(); 
-    return `${d}, ${timeSliced}`; 
-}
+    const date = new Date(resultDate);
+    const actual = (date.toString()).slice(0,24);
+    return actual;
+}   
 
 // Converts a month as number to the name of month
 // Params: @Date
@@ -129,8 +127,8 @@ dataApp.codeToFlag = (countryCode) => {
 dataApp.displayCountryList = () => {
     const selectList = $('#countryList');
     selectList.empty();
-
-    for ( country in countriesObject ) {
+    const sortedCountriesObject = dataApp.sortObjectByKey(countriesObject);
+    for ( country in sortedCountriesObject ) {
         if (country != "UM") {
             const countryName = countriesObject[country].Name
             selectList.append(`<option value=${country}>${countryName}</option>`);
