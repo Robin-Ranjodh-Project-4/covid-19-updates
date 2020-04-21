@@ -11,4 +11,4 @@ Project Features:
 - Accessible UI elements
 - Responsive design
 
-View the project <a  href="https://robin-ranjodh-project-4.github.io/robin-ranjodh-project-4/">here</a>.
+View the project <a  href="https://robin-ranjodh-project-4.github.io/covid-19-updates">here</a>.
