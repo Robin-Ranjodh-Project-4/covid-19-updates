@@ -355,7 +355,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
         },
         options: {
             tooltips: {
-                mode: 'line'
+                mode: 'index',  
             },
             aspectRatio: 1.4,
             maintainAspectRatio: false,
@@ -363,10 +363,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                 position: 'bottom',
                 labels: {
                     boxWidth: 15,
-                },
-                tooltips: {
-                    mode: 'dataset'
-                }
+                }, 
             },
             scales: {
                 yAxes: [{
@@ -388,7 +385,6 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
                     gridLines: {
                         zeroLineColor: "black",
                         zeroLineWidth: 1
-
                     },
                 }],
             },
