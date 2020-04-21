@@ -4,11 +4,15 @@ const dataApp = {} //namespace object
 // property store the map
 dataApp.map = '';
 dataApp.marker = '';
+// property will store the result by country code 
+dataApp.casesByCCode = '';
+// property will store line graph
 dataApp.lineGraph = null; 
+// property to store colors
 dataApp.blue = '#30bbdd';
 dataApp.red = '#f55179';
 dataApp.green = '#64d9c1';
-// object to store month
+// property to store month
 dataApp.months = {
     '01': 'Jan',
     '02': 'Feb',
@@ -31,7 +35,7 @@ Chart.defaults.global.hover.intersect = false;
 
 // AJAX CALLS - PROMISE OBJECTS
 // return global data promise
-// Params: @EndPoint - summary or countries
+// @Params: EndPoint - summary or countries
 dataApp.getGlobalData = (endPoint) => {
     return $.ajax({
         url: `https://api.covid19api.com/${endPoint}`,
@@ -41,7 +45,7 @@ dataApp.getGlobalData = (endPoint) => {
 }
 
 // returns the country data promise
-// Params: @CountryCode
+// @Params: CountryCode
 dataApp.getCountryData = function (countryCode) {
     return $.ajax({
         url: `https://api.covid19api.com/total/country/${countryCode}`,
@@ -51,7 +55,7 @@ dataApp.getCountryData = function (countryCode) {
 }
 
 // returns rest countries data promise
-// Params: @CountryCode
+// @Params: CountryCode
 dataApp.getRestCountriesData = function (countryCode) {
     const apiUrl = `https://restcountries-v1.p.rapidapi.com/alpha/${countryCode}`;
     return $.ajax({
@@ -66,7 +70,7 @@ dataApp.getRestCountriesData = function (countryCode) {
 }
 
 // returns reverse geo location promise (map click)
-// Params: @LatLng - string
+// @Params: LatLng - string
 dataApp.getGeoLocation = function (latlng) {
     return $.ajax({
         url: `https://www.mapquestapi.com/geocoding/v1/reverse?key=ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn&location=${latlng}`,
@@ -79,11 +83,11 @@ dataApp.getGeoLocation = function (latlng) {
 }
 
 // Adds white space after every 3rd digit
-// Params: @Number
+// @Params: Number
 dataApp.formatNumber = (num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')); 
 
 // Get formatted time string in format (Sat Apr 18 2020, 9:05:03 a.m) from json date
-// Params: @Date - json format
+// @Params: Date - json format
 dataApp.formatDate = (resultDate) => {
     const date = new Date(resultDate);
     const actual = (date.toString()).slice(0,24);
@@ -91,31 +95,14 @@ dataApp.formatDate = (resultDate) => {
 }   
 
 // Converts a month as number to the name of month
-// Params: @Date
+// @Params: Date - to convert mm to mmm format
 dataApp.convertDatetoMonth = (date) => {
     const month = date.slice(0, 2);
     return dataApp.months[month]
 }
 
-// Sort the object by its key in ascending order
-// (This method works by converting an object to array and sort and then convert back to the object)
-// Params: @Object -  to be sorted
-dataApp.sortObjectByKey = (object) => {
-    let sorted = {},key, array = [];
-    for (key in object) {
-        if (object.hasOwnProperty(key)) {
-            array.push(key);
-        }
-    }
-    array.sort();
-    for (key = 0; key < array.length; key++) {
-        sorted[array[key]] = object[array[key]];
-    }
-    return sorted;
-}
-
 // converts country code to flag
-// Params: @CountryCode
+// @Params: CountryCode - convert to flag emoji code
 dataApp.codeToFlag = (countryCode) => {
     return countryCode
         .toUpperCase()
@@ -123,12 +110,11 @@ dataApp.codeToFlag = (countryCode) => {
 }
 
 // This method get the country list from the given country list in summary result
-// Params: @no-params
+// @no-params
 dataApp.displayCountryList = () => {
     const selectList = $('#countryList');
     selectList.empty();
-    const sortedCountriesObject = dataApp.sortObjectByKey(countriesObject);
-    for ( country in sortedCountriesObject ) {
+    for ( country in countriesObject ) {
         if (country != "UM") {
             const countryName = countriesObject[country].Name
             selectList.append(`<option value=${country}>${countryName}</option>`);
@@ -138,7 +124,7 @@ dataApp.displayCountryList = () => {
 }
 
 // Display global statistics based on user selection
-// Params: @type - totalCases or newCases
+// @Params: type - totalCases or newCases
 dataApp.displayGlobalData = (type) => {
     $.when(dataApp.getGlobalData("summary"))
     .then((result) => {
@@ -169,7 +155,7 @@ dataApp.displayGlobalData = (type) => {
 }
 
 // Gets data for top ten country data
-// Params: @no-params 
+// @no-params 
 dataApp.displayTopTen = () => {
     $.when(dataApp.getGlobalData("summary"))
     .then((result) => {
@@ -196,7 +182,7 @@ dataApp.displayTopTen = () => {
 };
 
 // Displays top ten country data to chart
-// Params: @CountryNames, @ConfirmedCases, @DeathCases, @RecoveredCases
+// @Params: CountryNames, ConfirmedCases, DeathCases, RecoveredCases
 dataApp.displayChart = (countries, confirmed, deaths, recovered) => {   
     const confirmedPerThousand = confirmed.map(num => num/1000);
     const deathsPerThousand = deaths.map(num => num / 1000);
@@ -305,7 +291,7 @@ dataApp.displayChart = (countries, confirmed, deaths, recovered) => {
 }
 
 // Displays line graph for selected country
-// Params: @Dates, @ConfirmedCases, @DeathCases, @RecoveredCases, @CountryName
+// @Params: Dates, ConfirmedCases, DeathCases, RecoveredCases, CountryName
 dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
     
     // Destroy data for previous selection
@@ -407,7 +393,7 @@ dataApp.displayLineGraph = (dates, cCases, dCases, rCases, name) => {
 }
 
 // Displays stats for selected country
-// Params: @CountryCode, @CountryName
+// @Params: CountryCode, CountryName
 dataApp.displayCountryData = (countryCode, countryName) => {
     $('.countryName span').html(countryName);
     
@@ -458,7 +444,7 @@ dataApp.displayCountryData = (countryCode, countryName) => {
 }
 
 // Display the location of country on map with the popup showing number of cases
-// Params: @Latitude, @Longitude, @CountryName, @ConfirmedCases, @CountryCode
+// @Params: Latitude, Longitude, CountryName, ConfirmedCases, CountryCode
 dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
     // remove previously display markers on map
     if (dataApp.map.hasLayer(dataApp.marker))
@@ -488,7 +474,7 @@ dataApp.displayOnMap = (lat, lng, name, cases, cC) => {
 }
 
 // Get population, cases and lat, lng for selected country
-// Params: @CountryCode
+// @Params: CountryCode
 dataApp.displayRestCountriesData = (countryCode) => {
     const receivedRestPromise = dataApp.getRestCountriesData(countryCode);
     const receivedCountryPromise = dataApp.getCountryData(countryCode);
@@ -511,7 +497,7 @@ dataApp.displayRestCountriesData = (countryCode) => {
 }
 
 // when user click on the map
-// Params: @ClickEvent
+// @Params: ClickEvent
 dataApp.handleMapClick = (e) => {
     // get the geocode location from the click event
     const lat = e.latlng.lat;
@@ -549,18 +535,20 @@ dataApp.handleMapClick = (e) => {
 }
 
 // get the map from the mapQuest api
-// Params: @Latitude, @Longitude
+// @Params: Latitude, Longitude - to center on
 dataApp.getMap = (lat, lng) => {
     // api key for map
     const apiKEY = 'ozwRV4KrZgLGMjKBYbnTIZBWQAN4JZBn';
     L.mapquest.key = apiKEY;
     let baseLayer = L.mapquest.tileLayer('map');
+    let darkLayer = L.mapquest.tileLayer('dark');
+    let lightLayer = L.mapquest.tileLayer('light');
     // get map from mapQuest and center it on given lat, lng
     // 'map' is the id of the div to display map in html
     dataApp.map =
         L.mapquest.map('map', {
             center: [`${lat}`, `${lng}`],
-            layers: baseLayer,
+            layers: darkLayer,
             zoom: 2,
             maxZoom:10,
             minZoom:2,
@@ -570,24 +558,24 @@ dataApp.getMap = (lat, lng) => {
     //  control to show the map in light and dark modes
     L.control.layers({
         'Map': baseLayer,
-        'Light': L.mapquest.tileLayer('light'),
-        'Dark': L.mapquest.tileLayer('dark')
+        'Light': lightLayer,
+        'Dark': darkLayer
     }).addTo(dataApp.map);
 
     $.when(dataApp.getGlobalData("summary"))
     .then((result)=>{
         // get the result from Covid-19 with cases in an object in ascending order
-        const sortedCountriesObject = dataApp.getJsonObject(result);
+        dataApp.casesByCCode = dataApp.getJsonObject(result);
         // set a delay in binding the incoming result to the map
         setTimeout(function(){
-            dataApp.bindCasesToMap(sortedCountriesObject);
+            dataApp.bindCasesToMap();
         }, 
         1000);
     })
 }
 
 // get the object in json format from the incoming result
-// Params: @Result-result from Covid-19 summary end point
+// @Params: Result - result from Covid-19 summary end point
 dataApp.getJsonObject = (result)=>{
     let object = '{';
     for (country in result.Countries) {
@@ -597,22 +585,18 @@ dataApp.getJsonObject = (result)=>{
     }
     object = object.slice(0, -1);
     object = object + "}";
-    const jsonObject = JSON.parse(object);
-    // sort the object in ascending order for key
-    dataApp.casesByCCode = dataApp.sortObjectByKey(jsonObject);
-    // return the sorted object
-    return dataApp.sortObjectByKey(countriesObject);
+    return JSON.parse(object);
 }
 
 // bind the incoming cases result to the map
-// Params: @Sorted countries object containing country cases
-dataApp.bindCasesToMap = (sortedCountriesObject)=>{
-    for (country in sortedCountriesObject) {
-        // if the country data is returned from result in object
+// @no-params: - will use object property and global countries object
+dataApp.bindCasesToMap = ()=>{
+    for (country in countriesObject) {
+        // if the country has the cases in returned result
         if (dataApp.casesByCCode.hasOwnProperty(country)) {
-            const lat = sortedCountriesObject[country].Lat + "";
-            const lng = sortedCountriesObject[country].Lng + "";
-            const name = sortedCountriesObject[country].Name + "";
+            const lat = countriesObject[country].Lat + "";
+            const lng = countriesObject[country].Lng + "";
+            const name = countriesObject[country].Name + "";
             const cases = dataApp.casesByCCode[country].Confirmed + "";
             const flag = dataApp.codeToFlag(country);
             // add the area to the map if it has a location and has positive cases
@@ -629,8 +613,8 @@ dataApp.bindCasesToMap = (sortedCountriesObject)=>{
 }
 
 // Mobile nav menu
+// @no-params
 dataApp.toggleMenu = () => {
-
         $('nav ul').toggleClass('showMenu'); // show/hide menu 
         $('button i').toggleClass("fa-times");
     //On clicking outside the mobile nav
@@ -645,6 +629,7 @@ dataApp.toggleMenu = () => {
 }
 
 // Initialization
+// @no-params
 dataApp.init = () => {
     // On page load: 
     dataApp.displayCountryList();
