@@ -601,10 +601,13 @@ dataApp.bindCasesToMap = ()=>{
             const flag = dataApp.codeToFlag(country);
             // add the area to the map if it has a location and has positive cases
             if (lng !== 'undefined' && cases !== "0") {
+                let circleR = cases;
+                if(cases>=400000)
+                    circleR = 400000;
                 L.circle(
                     [lat, lng],
                     {
-                        radius: `${cases}`,
+                        radius: `${circleR}`,
                     })
                     .bindPopup(`${flag} <strong>${name}</strong> has<br><strong>${cases}</strong> confirmed cases`).addTo(dataApp.map)
             }
