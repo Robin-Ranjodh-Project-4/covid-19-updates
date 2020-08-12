@@ -850,6 +850,36 @@ form select, form option {
   }
 }
 
+.adBox {
+  margin: 50px auto;
+  margin-bottom: 0px;
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+.leaderBoardAd,
+.squareBoxAd {
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .leaderBoardAd {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .squareBoxAd {
+    display: none;
+  }
+}
+
 footer {
   text-align: center;
   padding: 20px 0;
